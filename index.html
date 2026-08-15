@@ -1473,7 +1473,7 @@
 
   <!-- Project Lightbox Modal (#project-modal) -->
   <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 md:p-6 modal-backdrop transition-all duration-300" onclick="handleModalBackdropClick(event)">
-    <div class="w-full max-w-4xl bg-[#0d0d0d] border border-white/15 rounded-2xl sm:rounded-3xl relative shadow-2xl overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] text-left">
+    <div class="w-full max-w-5xl bg-[#0d0d0d] border border-white/15 rounded-2xl sm:rounded-3xl relative shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[94vh] md:max-h-[85vh] md:h-[620px] lg:h-[680px] text-left">
       <!-- Close Button -->
       <button onclick="closeProjectModal(event)" class="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/75 hover:bg-black border border-white/20 text-white flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg" title="Close (Esc)">
         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1481,9 +1481,9 @@
         </svg>
       </button>
 
-      <!-- Media Block (Top) -->
-      <div class="w-full h-[250px] sm:h-[380px] md:h-[450px] max-h-[50vh] sm:max-h-[60vh] bg-[#050505] relative flex items-center justify-center overflow-hidden shrink-0 border-b border-white/10">
-        <video id="modal-video" controls autoplay class="w-full h-full max-h-[50vh] sm:max-h-[60vh] object-contain hidden"></video>
+      <!-- Left Column: Media Block -->
+      <div class="w-full md:w-[56%] lg:w-[60%] h-[240px] sm:h-[360px] md:h-full bg-[#050505] relative flex items-center justify-center overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-white/10">
+        <video id="modal-video" controls autoplay class="w-full h-full object-contain hidden"></video>
 
         <!-- Video Replay Overlay Button -->
         <div id="modal-video-replay-btn" class="absolute inset-0 z-30 hidden items-center justify-center bg-black/50 backdrop-blur-xs pointer-events-none transition-all duration-300">
@@ -1493,7 +1493,7 @@
         </div>
 
         <div id="modal-gallery" class="relative w-full h-full flex items-center justify-center bg-[#050505] hidden">
-          <img id="modal-gallery-img" src="" alt="Gallery slide" class="w-full h-full max-h-[50vh] sm:max-h-[60vh] object-contain transition-opacity duration-300" style="object-fit: contain !important;">
+          <img id="modal-gallery-img" src="" alt="Gallery slide" class="w-full h-full object-contain transition-opacity duration-300" style="object-fit: contain !important;">
           
           <button onclick="prevGalleryImage(event)" class="modal-gallery-arrow absolute left-2 sm:left-4 z-20 transition-all cursor-pointer shadow-lg active:scale-90" title="Previous Image">
             <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -1509,37 +1509,49 @@
         </div>
       </div>
 
-      <!-- Information Block (Bottom) -->
-      <div class="modal-content-container p-4 sm:p-6 overflow-y-auto space-y-3.5 sm:space-y-4 flex-1 text-left">
-        <div>
-          <div class="flex items-center gap-2 mb-1.5">
-            <span id="modal-category" class="text-xs font-mono text-[#ff5722] tracking-wider uppercase font-semibold"></span>
-            <span class="text-white/30">•</span>
-            <span id="modal-type-badge" class="text-xs font-mono text-white/60 uppercase"></span>
+      <!-- Right Column: Information Block -->
+      <div class="w-full md:w-[44%] lg:w-[40%] flex flex-col h-full overflow-hidden relative bg-[#0d0d0d]">
+        <div class="modal-content-container p-4 sm:p-6 overflow-y-auto space-y-4 flex-1 text-left" onscroll="checkModalScrollHint(this)">
+          <div>
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span id="modal-category" class="text-xs font-mono text-[#ff5722] tracking-wider uppercase font-semibold"></span>
+              <span class="text-white/30">•</span>
+              <span id="modal-type-badge" class="text-xs font-mono text-white/60 uppercase"></span>
+            </div>
+            <h3 id="modal-title" class="text-xl sm:text-2xl font-bold text-white mb-2.5 leading-snug"></h3>
+            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
           </div>
-          <h3 id="modal-title" class="text-2xl font-bold text-white mb-2.5"></h3>
-          <div id="modal-tags" class="flex flex-wrap gap-2"></div>
-        </div>
 
-        <div>
-          <h4 class="text-[11px] font-mono uppercase tracking-widest text-white/50 mb-1.5">Project Overview</h4>
-          <p id="modal-description" class="text-white/80 text-sm sm:text-base leading-relaxed"></p>
-        </div>
-
-        <div>
-          <div class="flex items-center gap-2 mb-2 text-[#ff5722]">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
-            <h4 class="text-[11px] font-mono uppercase tracking-widest text-white font-semibold">AI Tools & Tech Stack</h4>
+          <div>
+            <h4 class="text-[11px] font-mono uppercase tracking-widest text-white/50 mb-1.5">Project Overview</h4>
+            <p id="modal-description" class="text-white/80 text-xs sm:text-sm leading-relaxed"></p>
           </div>
-          <div id="modal-tools" class="flex flex-wrap gap-2"></div>
+
+          <div>
+            <div class="flex items-center gap-2 mb-2 text-[#ff5722]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+              <h4 class="text-[11px] font-mono uppercase tracking-widest text-white font-semibold">AI Tools & Tech Stack</h4>
+            </div>
+            <div id="modal-tools" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <span class="text-xs text-white/50 font-mono">Ready to create similar visuals for your brand?</span>
+            <button onclick="closeProjectModal(); openContactModal();" class="bg-[#ff5722] hover:bg-[#ff5722]/90 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#ff5722]/20 text-sm whitespace-nowrap">
+              <span>Inquire About Project</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </button>
+          </div>
         </div>
 
-        <div class="pt-3 border-t border-white/10 flex items-center justify-between flex-wrap gap-3">
-          <span class="text-xs text-white/50 font-mono">Ready to create similar visuals for your brand?</span>
-          <button onclick="closeProjectModal(); openContactModal();" class="bg-[#ff5722] hover:bg-[#ff5722]/90 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#ff5722]/20 text-sm">
-            <span>Inquire About Similar Project</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-          </button>
+        <!-- Mobile Scroll Indicator & Dark Gradient Overlay (Mobile < md ONLY) -->
+        <div id="modal-scroll-hint" class="md:hidden absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/85 to-transparent pointer-events-none flex items-end justify-center pb-2 transition-opacity duration-300 z-30">
+          <div class="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-white/80 bg-black/80 px-3 py-1 rounded-full border border-white/15 backdrop-blur-md shadow-lg">
+            <span>Scroll for details</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -2045,6 +2057,23 @@
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+
+      const contentContainer = modal.querySelector('.modal-content-container');
+      if (contentContainer) {
+        contentContainer.scrollTop = 0;
+        setTimeout(() => checkModalScrollHint(contentContainer), 100);
+      }
+    }
+
+    function checkModalScrollHint(container) {
+      const hint = document.getElementById('modal-scroll-hint');
+      if (!container || !hint) return;
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 15;
+      if (isAtBottom || container.scrollHeight <= container.clientHeight + 10) {
+        hint.classList.add('opacity-0');
+      } else {
+        hint.classList.remove('opacity-0');
+      }
     }
 
     function changeCardSlide(event, btn, direction) {
