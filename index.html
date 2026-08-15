@@ -479,18 +479,18 @@
       }
 
       /* Navbar Link Styling for Tablets */
-      #nav-home, #nav-about, #nav-portfolio, #nav-contacts {
+      #nav-home, #nav-about, #nav-portfolio, #nav-process, #nav-contacts {
         color: rgba(255, 255, 255, 0.7) !important;
         outline: none !important;
         -webkit-tap-highlight-color: transparent !important;
       }
-      #nav-home:hover, #nav-about:hover, #nav-portfolio:hover, #nav-contacts:hover,
-      #nav-home:focus, #nav-about:focus, #nav-portfolio:focus, #nav-contacts:focus,
-      #nav-home:active, #nav-about:active, #nav-portfolio:active, #nav-contacts:active {
+      #nav-home:hover, #nav-about:hover, #nav-portfolio:hover, #nav-process:hover, #nav-contacts:hover,
+      #nav-home:focus, #nav-about:focus, #nav-portfolio:focus, #nav-process:focus, #nav-contacts:focus,
+      #nav-home:active, #nav-about:active, #nav-portfolio:active, #nav-process:active, #nav-contacts:active {
         color: rgba(255, 255, 255, 0.7) !important;
       }
-      #nav-home.text-\[\#ff5722\], #nav-about.text-\[\#ff5722\], #nav-portfolio.text-\[\#ff5722\], #nav-contacts.text-\[\#ff5722\],
-      #nav-home.is-active, #nav-about.is-active, #nav-portfolio.is-active, #nav-contacts.is-active {
+      #nav-home.text-\[\#ff5722\], #nav-about.text-\[\#ff5722\], #nav-portfolio.text-\[\#ff5722\], #nav-process.text-\[\#ff5722\], #nav-contacts.text-\[\#ff5722\],
+      #nav-home.is-active, #nav-about.is-active, #nav-portfolio.is-active, #nav-process.is-active, #nav-contacts.is-active {
         color: #ff5722 !important;
       }
 
@@ -638,6 +638,7 @@
         <button onclick="scrollToSection('home')" id="nav-home" class="transition-colors duration-200 cursor-pointer text-[#ff5722] font-semibold whitespace-nowrap">Home</button>
         <button onclick="scrollToSection('about')" id="nav-about" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">About</button>
         <button onclick="scrollToSection('portfolio')" id="nav-portfolio" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">Portfolio</button>
+        <button onclick="scrollToSection('process')" id="nav-process" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">Process</button>
         <button onclick="scrollToSection('contacts')" id="nav-contacts" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">Contacts</button>
       </nav>
 
@@ -684,7 +685,7 @@
         </button>
       </div>
 
-      <!-- Compact Mobile Navigation Links (2x2 Grid) -->
+      <!-- Compact Mobile Navigation Links -->
       <nav class="grid grid-cols-2 gap-2 py-1">
         <button onclick="scrollToSection('home'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
           <span>Home</span>
@@ -698,7 +699,11 @@
           <span>Portfolio</span>
           <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
-        <button onclick="scrollToSection('contacts'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+        <button onclick="scrollToSection('process'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+          <span>Process</span>
+          <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button onclick="scrollToSection('contacts'); closeMobileMenu();" class="col-span-2 flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
           <span>Contacts</span>
           <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
@@ -1395,8 +1400,8 @@
     </div>
   </section>
 
-  <!-- How We Work Together Section (#process-section) -->
-  <section id="process-section" class="relative z-20 bg-[#000000] w-full py-16 sm:py-32 px-4 sm:px-8 lg:px-12 border-t border-white/10">
+  <!-- How We Work Together Section (#process) -->
+  <section id="process" class="relative z-20 bg-[#000000] w-full py-16 sm:py-32 px-4 sm:px-8 lg:px-12 border-t border-white/10">
     <div class="max-w-7xl mx-auto text-left">
       
       <!-- Section Header & Badge -->
@@ -2106,6 +2111,7 @@
         'home': document.getElementById('nav-home'),
         'about': document.getElementById('nav-about'),
         'portfolio': document.getElementById('nav-portfolio'),
+        'process': document.getElementById('nav-process'),
         'contacts': document.getElementById('nav-contacts')
       };
       Object.keys(items).forEach(key => {
@@ -2130,6 +2136,8 @@
         document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' });
       } else if (id === 'portfolio') {
         document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (id === 'process' || id === 'how-we-work') {
+        (document.getElementById('process-section') || document.getElementById('process') || document.getElementById('how-we-work'))?.scrollIntoView({ behavior: 'smooth' });
       } else if (id === 'contacts') {
         document.getElementById('contacts-section')?.scrollIntoView({ behavior: 'smooth' });
       }
@@ -2415,6 +2423,7 @@
     function updateScrollspy() {
       const aboutEl = document.getElementById('about-section');
       const portfolioEl = document.getElementById('portfolio');
+      const processEl = document.getElementById('process') || document.getElementById('process-section');
       const contactsEl = document.getElementById('contacts-section');
 
       const vh = window.innerHeight;
@@ -2431,7 +2440,16 @@
         }
       }
 
-      // 2. Portfolio section: Active only while portfolio cards are inside active viewport range
+      // 2. Process section: Active while process section is inside active viewport range
+      if (processEl) {
+        const processRect = processEl.getBoundingClientRect();
+        if (processRect.top <= vh * 0.55 && processRect.bottom >= vh * 0.20) {
+          setActiveNav('process');
+          return;
+        }
+      }
+
+      // 3. Portfolio section: Active only while portfolio cards are inside active viewport range
       if (portfolioEl) {
         const portfolioRect = portfolioEl.getBoundingClientRect();
         if (portfolioRect.top <= vh * 0.55 && portfolioRect.bottom >= vh * 0.20) {
@@ -2440,7 +2458,7 @@
         }
       }
 
-      // 3. About section: Active while about section is inside active viewport range
+      // 4. About section: Active while about section is inside active viewport range
       if (aboutEl) {
         const aboutRect = aboutEl.getBoundingClientRect();
         if (aboutRect.top <= vh * 0.55 && aboutRect.bottom >= vh * 0.20) {
@@ -2449,7 +2467,7 @@
         }
       }
 
-      // 4. Default to Home
+      // 5. Default to Home
       setActiveNav('home');
     }
 
