@@ -1651,6 +1651,8 @@
       const padded = String(index).padStart(3, '0');
       const filename = `ezgif-frame-${padded}.jpg`;
       return [
+        `/scroll-foto/${filename}`,
+        `./scroll-foto/${filename}`,
         `./Scroll foto/${filename}`,
         `./Scroll%20foto/${filename}`,
         `./${filename}`
@@ -2259,6 +2261,14 @@
     initGalleryTouchSwipes();
     initFilterScrollIndicator();
     requestAnimationFrame(animationLoop);
+
+    setTimeout(() => {
+      const loader = document.getElementById('preloader') || document.querySelector('.preloader') || document.getElementById('loader');
+      if (loader) {
+        loader.style.display = 'none';
+        loader.classList.add('hidden');
+      }
+    }, 1500);
   </script>
 </body>
 </html>
