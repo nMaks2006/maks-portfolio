@@ -1708,7 +1708,11 @@
 
     async function renderFrame(index) {
       const clampedIndex = Math.min(FRAME_COUNT - 1, Math.max(0, index));
-      const img = await images[clampedIndex];
+      let img = await images[clampedIndex];
+
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        img = await images[0];
+      }
 
       if (img && img.complete && img.naturalWidth > 0) {
         const cWidth = canvas.width;
@@ -1721,12 +1725,11 @@
         const isDesktop = windowW > 1024; // Desktop (from 1025px+)
         const isMobilePhone = windowW < 640; // Mobile Smartphones ONLY (< 640px)
 
-        if (isDesktop) {
-          // Desktop (from 1025px+): 100% Static background character photo (center top alignment)
-          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
-          const imgW = staticImg.naturalWidth || 1920;
-          const imgH = staticImg.naturalHeight || 1080;
+        const imgW = img.naturalWidth || 1920;
+        const imgH = img.naturalHeight || 1080;
 
+        if (isDesktop) {
+          // Desktop (from 1025px+): 100% Dynamic background character photo (center top alignment)
           const maxAllowedH = cHeight * 0.88;
           const baseScale = Math.min(cWidth / imgW, maxAllowedH / imgH);
 
@@ -1736,31 +1739,19 @@
           const offsetX = (cWidth - renderW) / 2;
           const offsetY = cHeight * 0.09;
 
-          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+          ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
         } else if (isMobilePhone) {
-          // Mobile Smartphones ONLY (< 640px: iPhone, Galaxy, etc.):
-          // 1. Shift character face right towards right 20% edge (background-position: 80% center / right 20% center)
-          // 2. Creates generous dark background space on the left for left-aligned Hero text block
-          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
-          const imgW = staticImg.naturalWidth || 1920;
-          const imgH = staticImg.naturalHeight || 1080;
-
-          // Scale so image height is ~95% of viewport and width is ~142% of screen width
+          // Mobile Smartphones ONLY (< 640px: iPhone, Galaxy, etc.)
           const scale = Math.max((cWidth * 1.42) / imgW, (cHeight * 0.95) / imgH);
           const renderW = imgW * scale;
           const renderH = imgH * scale;
 
-          // Shift face right to 80% center / right 20% position
           const offsetX = (cWidth - renderW) / 2 + (cWidth * 0.32);
           const offsetY = cHeight * 0.05;
 
-          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+          ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
         } else {
-          // iPads & Tablets (640px - 1024px: iPad Pro, iPad Air, iPad Mini):
-          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
-          const imgW = staticImg.naturalWidth || 1920;
-          const imgH = staticImg.naturalHeight || 1080;
-
+          // iPads & Tablets (640px - 1024px: iPad Pro, iPad Air, iPad Mini)
           const scale = Math.max((cWidth * 1.35) / imgW, (cHeight * 0.95) / imgH);
           const renderW = imgW * scale;
           const renderH = imgH * scale;
@@ -1768,7 +1759,7 @@
           const offsetX = (cWidth - renderW) / 2 + (cWidth * 0.25);
           const offsetY = cHeight * 0.05;
 
-          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+          ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
         }
 
         lastRenderedFrame = clampedIndex;
