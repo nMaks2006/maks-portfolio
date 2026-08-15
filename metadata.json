@@ -1,0 +1,6 @@
+{
+  "name": "Maks | AI-Creator",
+  "description": "Minimalist Creative Director portfolio hero section.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maks | AI Visual & Video Creator</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Global Custom Styled Dark-Orange Scrollbar */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #e64a19 #0a0a0a;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(230, 74, 25, 0.75);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 87, 34, 0.3);
+      transition: background 0.2s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ff5722;
+      box-shadow: 0 0 10px rgba(255, 87, 34, 0.8);
+    }
+
+    .modal-content-container::-webkit-scrollbar {
+      display: block !important;
+      width: 6px !important;
+    }
+
+    .modal-content-container::-webkit-scrollbar-track {
+      background: #0a0a0a !important;
+      border-radius: 10px !important;
+    }
+
+    .modal-content-container::-webkit-scrollbar-thumb {
+      background: #ff5722 !important;
+      border-radius: 10px !important;
+    }
+
+    .modal-content-container::-webkit-scrollbar-thumb:hover {
+      background: #ff7043 !important;
+    }
+
+    .modal-content-container {
+      -ms-overflow-style: auto !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #ff5722 #0a0a0a !important;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #000000 !important;
+      color: #ffffff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    #canvas-fixed-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #000000;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      will-change: opacity, transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      transform: translate3d(0, 0, 0);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #scroll-canvas {
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      object-fit: cover;
+      display: block;
+      background-color: #000000;
+    }
+
+    #vignette-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(circle at center, transparent 40%, #000000 90%);
+    }
+
+    /* High-Contrast Glassmorphism for .about-text-card & Service Cards */
+    .about-text-card,
+    #about-section .rounded-\[20px\] {
+      background: rgba(6, 6, 12, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 650px;
+    }
+
+    /* Mobile Light & Compact Layout Adjustments (< 767px) */
+    @media (max-width: 767px) {
+      /* 1. Hero Section: Exactly 100dvh full screen on mobile */
+      #hero-section {
+        min-height: 100dvh !important;
+        height: 100dvh !important;
+        padding-top: 5.5rem !important;
+        padding-bottom: 3.5rem !important;
+        padding-left: 1.25rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+      }
+      #hero-section h1 {
+        font-size: clamp(1.8rem, 6.5vw, 2.3rem) !important;
+        line-height: 1.0 !important;
+        margin-bottom: 0.75rem !important;
+      }
+      #hero-section h2 {
+        font-size: 1.05rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 0.75rem !important;
+      }
+      #hero-section > p:nth-of-type(2) {
+        font-size: 0.9rem !important;
+        line-height: 1.55 !important;
+        margin-bottom: 1.5rem !important;
+      }
+      #hero-section button {
+        font-size: 0.875rem !important;
+      }
+
+      /* 2. About Me Section: Positioned below 100dvh first screen fold */
+      #intro-section {
+        padding-bottom: 0 !important;
+      }
+      #about-section {
+        padding-top: 6rem !important;
+        padding-bottom: 2rem !important;
+        margin-top: 0 !important;
+        margin-bottom: 1rem !important;
+        min-height: auto !important;
+      }
+      #about-section > div {
+        gap: 0.65rem !important;
+      }
+      .about-text-card {
+        padding: 1rem !important;
+        border-radius: 16px !important;
+      }
+      .about-text-card p:first-child {
+        font-size: 0.875rem !important; /* 14px */
+        line-height: 1.4 !important;
+      }
+      .about-text-card p:nth-child(2) {
+        font-size: 0.75rem !important; /* 12px */
+        line-height: 1.35 !important;
+      }
+
+      /* 1. 2x2 Grid Service Cards: p-3 (12px), 18px icons, text-[13px] title, text-[11px] description */
+      #about-section .grid-cols-2 {
+        gap: 0.625rem !important; /* gap-2.5 (10px) */
+        margin-top: 0.35rem !important;
+      }
+      #about-section .rounded-\[20px\] {
+        padding: 0.75rem !important; /* p-3 (12px) */
+        border-radius: 14px !important;
+      }
+      #about-section .rounded-\[20px\] svg {
+        width: 1.125rem !important; /* 18px */
+        height: 1.125rem !important; /* 18px */
+        margin-bottom: 0.25rem !important;
+      }
+      #about-section .rounded-\[20px\] h4 {
+        font-size: 0.8125rem !important; /* text-[13px] font-semibold */
+        line-height: 1.25 !important;
+        margin-bottom: 0.2rem !important;
+      }
+      #about-section .rounded-\[20px\] p {
+        font-size: 0.6875rem !important; /* text-[11px] leading-tight */
+        line-height: 1.3 !important;
+      }
+
+      /* 3. Portfolio & Filters: Compact vertical spacing to show 1st work (VERTEX) higher */
+      #portfolio {
+        padding-top: 2rem !important;
+        padding-bottom: 3.5rem !important;
+      }
+      #portfolio .mb-8 {
+        margin-bottom: 0.85rem !important;
+      }
+      .filter-btn {
+        padding: 0.35rem 0.85rem !important;
+        font-size: 0.75rem !important;
+      }
+      .portfolio-card-img-wrapper {
+        height: 185px !important;
+        margin-bottom: 12px !important;
+      }
+      .portfolio-card {
+        padding: 16px !important;
+        min-height: auto !important;
+      }
+    }
+
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #ff5722;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* Portfolio Card Image Hover & Wrapper Effects */
+    .portfolio-card {
+      overflow: hidden;
+      transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .portfolio-card-img-wrapper {
+      overflow: hidden;
+      border-radius: 12px;
+      height: 240px;
+      background: #0d0d0d;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .portfolio-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .portfolio-card:hover img {
+      transform: scale(1.03);
+    }
+
+    .portfolio-card.hidden-card {
+      display: none !important;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    /* Glassmorphism AI Play Button */
+    .play-btn-glass {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 102, 0, 0.15) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(255, 102, 0, 0.5) !important;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 !important;
+      color: #ffffff;
+    }
+
+    .portfolio-card:hover .play-btn-glass {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 102, 0, 0.7);
+      background: rgba(255, 102, 0, 0.25) !important;
+      border-color: rgba(255, 102, 0, 0.8) !important;
+    }
+
+    /* Glassmorphism Gallery Arrows in Modal (44x44px Touch friendly & responsive) */
+    .modal-gallery-arrow {
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.25) !important;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 640px) {
+      .modal-gallery-arrow:hover {
+        transform: scale(1.08);
+        background: rgba(255, 87, 34, 0.4) !important;
+        border-color: rgba(255, 87, 34, 0.8) !important;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .modal-gallery-arrow,
+      .modal-gallery-arrow:hover,
+      .modal-gallery-arrow:focus,
+      .modal-gallery-arrow:active {
+        background: rgba(0, 0, 0, 0.75) !important;
+        border-color: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
+      }
+    }
+
+    /* Mobile Landscape Optimization for 16:9 Video & Gallery */
+    @media (orientation: landscape) and (max-height: 500px) {
+      #project-modal > div {
+        max-height: 98vh !important;
+      }
+      #project-modal .shrink-0 {
+        height: 75vh !important;
+        max-height: 75vh !important;
+      }
+      #modal-video, #modal-gallery-img {
+        max-height: 75vh !important;
+      }
+    }
+
+    /* Tablet ONLY Optimization (iPad Mini / iPad Air / Pro 11": 768px - 1024px) */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      /* 1. Hero Screen: 100dvh full screen with safe bottom padding for ABOUT ME marker */
+      #hero-section {
+        min-height: 100dvh !important;
+        padding-top: 6rem !important;
+        padding-bottom: 6rem !important;
+        padding-left: 4.5rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+      }
+      #hero-section > p:first-child {
+        font-size: 1.6rem !important;
+        letter-spacing: -0.015em !important;
+        margin-bottom: 1.25rem !important;
+      }
+      #hero-section h1 {
+        font-size: 5.25rem !important;
+        line-height: 0.95 !important;
+        letter-spacing: -0.03em !important;
+        margin-bottom: 1.25rem !important;
+      }
+      #hero-section h2 {
+        font-size: 2.5rem !important;
+        margin-bottom: 1rem !important;
+      }
+      #hero-section > p:nth-of-type(2) {
+        font-size: 1.35rem !important;
+        max-width: 44rem !important;
+        margin-bottom: 1.75rem !important;
+      }
+      #hero-section button {
+        font-size: 1.2rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      /* 2. About Me Section: Positioned lower so orange glasses stay visible, with compact card gaps */
+      #intro-section {
+        padding-bottom: 0 !important;
+      }
+      #about-section {
+        min-height: auto !important;
+        margin-top: 0 !important;
+        margin-bottom: 2rem !important;
+        padding-top: 24vh !important; /* Pushes glass cards lower so character's orange sunglasses stay clear */
+        padding-bottom: 3rem !important;
+      }
+      #about-section > div {
+        gap: 1.25rem !important;
+      }
+      #about-section .grid-cols-1.lg\:grid-cols-2 {
+        gap: 1.25rem !important;
+        margin-top: 0.5rem !important;
+      }
+      .about-text-card {
+        padding: 1.5rem !important;
+      }
+
+      /* 3. Portfolio Transition: Seamless flow without empty black gap */
+      #portfolio {
+        padding-top: 4rem !important;
+        padding-bottom: 6rem !important;
+      }
+
+      /* Navbar Link Styling for Tablets */
+      #nav-home, #nav-about, #nav-portfolio, #nav-contacts {
+        color: rgba(255, 255, 255, 0.7) !important;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      #nav-home:hover, #nav-about:hover, #nav-portfolio:hover, #nav-contacts:hover,
+      #nav-home:focus, #nav-about:focus, #nav-portfolio:focus, #nav-contacts:focus,
+      #nav-home:active, #nav-about:active, #nav-portfolio:active, #nav-contacts:active {
+        color: rgba(255, 255, 255, 0.7) !important;
+      }
+      #nav-home.text-\[\#ff5722\], #nav-about.text-\[\#ff5722\], #nav-portfolio.text-\[\#ff5722\], #nav-contacts.text-\[\#ff5722\],
+      #nav-home.is-active, #nav-about.is-active, #nav-portfolio.is-active, #nav-contacts.is-active {
+        color: #ff5722 !important;
+      }
+
+      #vignette-overlay {
+        background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.4) 65%, #000000 95%) !important;
+      }
+    }
+
+    /* iPad Devices Layout (768px - 1024px: iPad Pro / Air / Mini) - ULTRA-BOLD MAGAZINE TYPOGRAPHY */
+    @media (max-width: 1024px) {
+      #hero-section {
+        min-height: 100dvh !important;
+        height: 100dvh !important;
+        padding-top: 4.5rem !important;
+        padding-bottom: 3.5rem !important;
+        padding-left: 2.5rem !important;
+        max-width: 60% !important; /* Left 60% text block overlay (~640px) */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        text-align: left !important;
+        z-index: 10 !important;
+      }
+      #hero-section > p:first-child {
+        font-size: 1.75rem !important; /* text-2xl (28px) */
+        font-weight: 600 !important;
+        letter-spacing: -0.015em !important;
+        margin-bottom: 0.85rem !important;
+      }
+      #hero-section h1 {
+        font-size: clamp(4rem, 7.5vw, 6rem) !important; /* text-6xl / text-7xl / text-8xl */
+        font-weight: 900 !important; /* font-black */
+        line-height: 0.92 !important; /* ultra-tight 0.92 */
+        letter-spacing: -0.04em !important; /* tracking-tighter */
+        margin-bottom: 1.15rem !important;
+      }
+      #hero-section h2 {
+        font-size: 1.5rem !important; /* text-2xl (24px) font-bold */
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        margin-bottom: 0.85rem !important;
+      }
+      #hero-section > p:nth-of-type(2) {
+        font-size: 1.15rem !important; /* 18.5px leading-relaxed */
+        line-height: 1.55 !important;
+        max-width: 36rem !important;
+        margin-bottom: 1.85rem !important;
+      }
+      #hero-section button {
+        font-size: 1.25rem !important; /* text-xl (20px) */
+      }
+      #hero-section button svg {
+        width: 1.4rem !important;
+        height: 1.4rem !important;
+      }
+    }
+
+    /* Mobile Smartphones ONLY (max-width: 639px: iPhone, Galaxy, etc.) */
+    @media (max-width: 639px) {
+      #hero-section {
+        max-width: 100% !important;
+        width: 88% !important;
+        padding-left: 1.25rem !important;
+        padding-right: 0.75rem !important;
+        padding-top: 4.5rem !important;
+        padding-bottom: 2.5rem !important;
+        align-items: flex-start !important;
+        text-align: left !important;
+        z-index: 10 !important;
+      }
+      #hero-section > p:first-child {
+        font-size: 0.95rem !important; /* text-sm font-medium */
+        font-weight: 500 !important;
+        margin-bottom: 0.45rem !important;
+      }
+      #hero-section h1 {
+        font-size: clamp(1.8rem, 7.5vw, 2.2rem) !important;
+        line-height: 0.96 !important;
+        margin-bottom: 0.65rem !important;
+      }
+      #hero-section h2 {
+        font-size: 1.1rem !important; /* text-base font-semibold */
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+        margin-bottom: 0.5rem !important;
+      }
+      #hero-section > p:nth-of-type(2) {
+        font-size: 0.85rem !important; /* text-xs (13.5px) leading-normal */
+        line-height: 1.45 !important;
+        max-width: 80% !important; /* Strictly on clean dark left background, clear of orange glasses */
+        margin-bottom: 1rem !important;
+      }
+      #hero-section button {
+        font-size: 0.875rem !important;
+      }
+      #hero-section button svg {
+        width: 1.1rem !important;
+        height: 1.1rem !important;
+      }
+    }
+
+    /* Hide scrollbar utility for filter nav */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    #modal-gallery-img {
+      object-fit: contain !important;
+    }
+
+    /* Subtle background image overlay dimming ONLY on mobile smartphones (< 768px) */
+    @media (max-width: 767px) {
+      #canvas-fixed-bg,
+      #scroll-canvas {
+        filter: brightness(0.75) !important;
+        -webkit-filter: brightness(0.75) !important;
+      }
+    }
+  </style>
+</head>
+<body class="selection:bg-[#ff5722] selection:text-white">
+
+  <!-- Preloader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Floating Header Navigation (Solid Dark Glass Blur for Crisp Scroll Depth) -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.8)] transition-all duration-300">
+    <div class="w-full px-4 sm:px-10 lg:px-24 py-3.5 sm:py-5 flex items-center justify-between gap-4">
+      
+      <!-- Logo -->
+      <div onclick="scrollToSection('home')" class="text-xl sm:text-2xl font-bold tracking-tight flex items-center gap-1.5 cursor-pointer select-none shrink-0">
+        <span class="text-white">Maks</span>
+        <span class="text-[#ff5722]">| AI-Creator</span>
+      </div>
+
+      <!-- Desktop Navigation links (Hidden on screens < 768px) -->
+      <nav class="hidden md:flex items-center gap-8 text-sm md:text-base font-medium">
+        <button onclick="scrollToSection('home')" id="nav-home" class="transition-colors duration-200 cursor-pointer text-[#ff5722] font-semibold whitespace-nowrap">Home</button>
+        <button onclick="scrollToSection('about')" id="nav-about" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">About</button>
+        <button onclick="scrollToSection('portfolio')" id="nav-portfolio" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">Portfolio</button>
+        <button onclick="scrollToSection('contacts')" id="nav-contacts" class="transition-colors duration-200 cursor-pointer text-white/70 hover:text-white whitespace-nowrap">Contacts</button>
+      </nav>
+
+      <!-- Desktop CTA Button (Hidden on screens < 768px) -->
+      <div class="hidden md:flex items-center">
+        <button onclick="openContactModal()" class="group flex items-center gap-3 bg-white text-black pl-5 pr-2 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] cursor-pointer shrink-0">
+          <span>Get in Touch</span>
+          <div class="w-8 h-8 rounded-full bg-[#ff5722] text-white flex items-center justify-center transition-transform duration-300 group-hover:rotate-45">
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Button (Visible on screens < 768px) - 44x44px Touch Target -->
+      <button onclick="toggleMobileMenu()" class="md:hidden min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-white/10 border border-white/15 text-white flex items-center justify-center cursor-pointer transition-all active:scale-95 shadow-md" title="Toggle Navigation Menu" aria-label="Toggle Navigation Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Overlay Drawer (#mobile-menu) -->
+  <div id="mobile-menu" class="fixed inset-0 z-50 hidden flex-col items-center justify-start p-4 pt-16 sm:pt-20 transition-all duration-300">
+    <!-- Click backdrop to dismiss -->
+    <div onclick="closeMobileMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-xs"></div>
+
+    <!-- Floating Compact Card -->
+    <div class="relative z-10 w-full max-w-sm rounded-2xl bg-[#0c0c0f]/95 backdrop-blur-2xl border border-white/15 p-4 shadow-[0_15px_40px_rgba(0,0,0,0.8)] flex flex-col gap-3 transition-all duration-300">
+      
+      <!-- Drawer Header Bar -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div onclick="scrollToSection('home'); closeMobileMenu();" class="text-sm font-bold tracking-tight flex items-center gap-1.5 cursor-pointer select-none">
+          <span class="text-white">Maks</span>
+          <span class="text-[#ff5722]">| AI-Creator</span>
+        </div>
+        <!-- Close Button -->
+        <button onclick="closeMobileMenu()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center cursor-pointer transition-all active:scale-95" title="Close Menu" aria-label="Close Menu">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Compact Mobile Navigation Links (2x2 Grid) -->
+      <nav class="grid grid-cols-2 gap-2 py-1">
+        <button onclick="scrollToSection('home'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+          <span>Home</span>
+          <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button onclick="scrollToSection('about'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+          <span>About</span>
+          <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button onclick="scrollToSection('portfolio'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+          <span>Portfolio</span>
+          <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button onclick="scrollToSection('contacts'); closeMobileMenu();" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-[#ff5722]/20 hover:text-white text-xs font-semibold text-white/90 transition-all cursor-pointer border border-white/5 hover:border-[#ff5722]/40 active:scale-98">
+          <span>Contacts</span>
+          <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </nav>
+
+      <!-- Mobile Compact CTA Button -->
+      <div class="pt-2 border-t border-white/10">
+        <button onclick="closeMobileMenu(); openContactModal();" class="w-full bg-[#ff5722] hover:bg-[#ff5722]/90 text-white font-semibold py-2.5 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#ff5722]/25 text-xs active:scale-98">
+          <span>Get in Touch</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Fixed Canvas Positioned Behind Page -->
+  <div id="canvas-fixed-bg">
+    <canvas id="scroll-canvas"></canvas>
+    <div id="vignette-overlay"></div>
+  </div>
+
+  <!-- Intro Section -->
+  <div id="intro-section" class="intro-section relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-32 sm:pb-64 flex flex-col justify-between">
+    
+    <main id="hero-section" class="min-h-screen h-screen flex flex-col justify-center items-start max-w-4xl text-left pl-6 sm:pl-14 lg:pl-24 pt-12 sm:pt-16 pb-12 sm:pb-16">
+      <p class="text-lg sm:text-xl lg:text-2xl text-white/90 font-medium mb-3.5 sm:mb-5 lg:mb-6 tracking-tight drop-shadow-md">
+        Hey, I'm Maks
+      </p>
+
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white leading-[0.95] select-none mb-4 lg:mb-5 drop-shadow-lg">
+        AI Visual<br />Creator.
+      </h1>
+
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl text-white font-medium leading-tight mb-3.5 max-w-2xl drop-shadow-md">
+        Bringing impossible visuals & AI videos to life.
+      </h2>
+
+      <p class="text-white/80 text-base sm:text-lg max-w-2xl font-normal leading-relaxed mb-6 lg:mb-7 drop-shadow-sm">
+        From cinematic AI video spots & UGC avatar ads to high-fashion studio editorials — creating visuals that captivate and convert.
+      </p>
+
+      <button onclick="scrollToSection('about')" class="inline-flex items-center gap-2 text-sm sm:text-base font-medium text-[#ff5722] hover:text-[#ff5722]/80 transition-colors group cursor-pointer drop-shadow-md">
+        <span>Read About Me & My Work</span>
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+        </svg>
+      </button>
+    </main>
+
+    <section id="about-section" class="min-h-screen flex flex-col justify-center text-left max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-[35vh] sm:mt-[50vh] mb-20 sm:mb-36">
+      <div class="flex flex-col gap-8 items-start text-left w-full">
+        <div class="flex items-center justify-between w-full flex-wrap gap-4 border-b border-white/20 pb-4">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#ff5722] animate-pulse"></span>
+            <h3 class="text-xs font-mono tracking-widest uppercase text-white font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              About Me — Maks
+            </h3>
+          </div>
+          <span class="text-xs font-mono text-white/80 font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            AI Video Commercials & Visual Direction
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch w-full mt-4">
+          <div class="flex justify-start w-full">
+            <div class="about-text-card space-y-4 text-left shadow-xl h-full flex flex-col justify-center" style="width: 100%; max-width: 650px;">
+              <p class="text-xl sm:text-2xl lg:text-3xl text-white/85 font-normal leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                I am a digital creator specializing in <span class="text-[#ff5722] font-semibold opacity-100">next-generation AI video synthesis & commercial media</span>, bridging artistic direction with state-of-the-art generative technology.
+              </p>
+              <p class="text-xs sm:text-sm text-white/65 font-normal leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+                My work focuses on producing hyper-realistic commercial visuals, cinematic AI video spots, UGC avatar ads, and high-fashion editorials. By leveraging custom AI video pipelines, neural voice synthesis, and multi-model workflows, I transform ambitious brand concepts into high-converting video reality.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-[650px] items-stretch">
+            <div class="rounded-[20px] flex flex-col justify-between border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+              <svg class="w-5 h-5 text-[#ff5722] mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <div>
+                <h4 class="text-white/90 font-bold text-sm mb-1 group-hover:text-white transition-colors drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  Cinematic AI Video & UGC
+                </h4>
+                <p class="text-xs text-white/65 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  Dynamic video spots, AI avatar ads, voiceovers, and performance ad creative.
+                </p>
+              </div>
+            </div>
+
+            <div class="rounded-[20px] flex flex-col justify-between border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+              <svg class="w-5 h-5 text-[#ff5722] mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.022.547l-2.387 2.387A2 2 0 003.6 21.464l.659-.659a4 4 0 012.828-1.172h1.586a4 4 0 012.828 1.172l.659.659a2 2 0 001.414.586h.828a2 2 0 001.414-.586l.659-.659a4 4 0 012.828-1.172h1.586a4 4 0 012.828 1.172l.659.659a2 2 0 001.414-.586z" />
+              </svg>
+              <div>
+                <h4 class="text-white/90 font-bold text-sm mb-1 group-hover:text-white transition-colors drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  AI Neural Pipelines
+                </h4>
+                <p class="text-xs text-white/65 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  Custom LoRA training, video prompt engineering, and multi-model workflows.
+                </p>
+              </div>
+            </div>
+
+            <div class="rounded-[20px] flex flex-col justify-between border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+              <svg class="w-5 h-5 text-[#ff5722] mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              </svg>
+              <div>
+                <h4 class="text-white/90 font-bold text-sm mb-1 group-hover:text-white transition-colors drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  E-Commerce & Product Spots
+                </h4>
+                <p class="text-xs text-white/65 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  High-converting visual assets for e-commerce, footwear, cosmetics & beverages.
+                </p>
+              </div>
+            </div>
+
+            <div class="rounded-[20px] flex flex-col justify-between border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+              <svg class="w-5 h-5 text-[#ff5722] mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+              <div>
+                <h4 class="text-white/90 font-bold text-sm mb-1 group-hover:text-white transition-colors drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  Creative Direction
+                </h4>
+                <p class="text-xs text-white/65 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                  Full end-to-end visual moodboards, AI staging, and final video rendering.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="relative z-20 bg-[#000000] w-full py-16 sm:py-32 px-4 sm:px-8 lg:px-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto text-left">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="w-5 h-5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        <h3 class="text-xs font-mono tracking-widest uppercase text-white/70">
+          Selected Works Portfolio
+        </h3>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-bold text-white mb-4">
+        Featured Commercial AI Videos & Visual Spots
+      </h2>
+      <p class="text-white/60 text-base max-w-3xl mb-10">
+        A curated selection of high-converting AI visuals, cinematic video spots, and lifestyle creative assets engineered for global brands.
+      </p>
+
+      <!-- Category Filter Bar (Single row horizontal scroll with custom mobile slider indicator) -->
+      <div class="mb-8 sm:mb-10">
+        <div id="filter-bar-container" class="flex items-center gap-2.5 overflow-x-auto pb-2 sm:pb-4 no-scrollbar flex-nowrap w-full max-w-full touch-pan-x scroll-smooth">
+          <button onclick="filterPortfolio('all', this)" class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-[#ff5722] text-white border-[#ff5722] shadow-lg shadow-[#ff5722]/25 scale-[1.03]" data-filter="all">All</button>
+          <button onclick="filterPortfolio('commercial', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="commercial">Commercial Video</button>
+          <button onclick="filterPortfolio('ugc', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="ugc">UGC Ads</button>
+          <button onclick="filterPortfolio('product', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="product">Product Photography</button>
+          <button onclick="filterPortfolio('fashion', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="fashion">Fashion & Lookbooks</button>
+          <button onclick="filterPortfolio('films', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="films">Short Films</button>
+        </div>
+
+        <!-- Filter Scroll Indicator Slider (Visible on Mobile & Tablets iPad Mini/Air < 1024px) -->
+        <div class="block lg:hidden mt-2.5 px-0.5">
+          <div class="flex items-center gap-1 text-[11px] text-white/50 font-mono mb-1.5">
+            <span>Swipe filters</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722] animate-pulse inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </div>
+          <!-- Track & Slider Thumb -->
+          <div id="filter-scroll-track" class="w-full h-1.5 bg-white/10 hover:bg-white/15 rounded-full relative overflow-hidden cursor-pointer transition-colors">
+            <div id="filter-scroll-thumb" class="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-[#ff5722] to-[#ff8c00] rounded-full shadow-[0_0_8px_rgba(255,87,34,0.6)] transition-all duration-75" style="width: 35%; left: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portfolio Grid: 12 Real Cards -->
+      <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Commercial Video (3 cards) -->
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="commercial"
+          data-type="video"
+          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786474175/0603.mp4"
+          data-title="VERTEX — Outdoor Extreme"
+          data-category-label="Commercial Video"
+          data-tags='["Commercial Video", "VFX Simulation", "Voiceover & SFX", "Outdoor Brand"]'
+          data-description="High-impact extreme weather outerwear commercial spot featuring dynamic storm & snow particle VFX, custom neural voiceover, and immersive spatial sound design created for an elite mountain gear campaign."
+          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="vertex-cover.jpg" alt="VERTEX Outdoor Extreme">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
+                <div class="play-btn-glass">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Commercial Video</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">VERTEX — Outdoor Extreme</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Commercial Video</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">VFX Simulation</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Voiceover & SFX</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Extreme weather outerwear spot featuring dynamic particle VFX, custom neural voiceover, and immersive sound design.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>Play Video Spot</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="commercial"
+          data-type="video"
+          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786474807/final_video.mp4"
+          data-title="Tom Ford — Neroli Portofino"
+          data-category-label="Commercial Video"
+          data-tags='["Luxury Commercial", "Underwater Physics", "Brand Identity"]'
+          data-description="High-end luxury fragrance commercial with photorealistic underwater caustics, refraction physics, and elegant Mediterranean aesthetic staging."
+          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="tom_ford-cover.jpg" alt="" style="object-position: center 75%;">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
+                <div class="play-btn-glass">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Commercial Video</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Tom Ford — Neroli Portofino</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Luxury Commercial</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Underwater Physics</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Brand Identity</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-end luxury fragrance commercial with photorealistic underwater caustics, refraction physics, and elegant staging.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>Play Video Spot</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="commercial"
+          data-type="video"
+          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786473931/OPTIMUM_NUTRITION.mp4"
+          data-title="Optimum Nutrition — Gold Standard Whey"
+          data-category-label="Commercial Video"
+          data-tags='["Dynamic Commercial", "Macro Fluid Dynamics", "Product Explosion"]'
+          data-description="High-energy sports performance spot showcasing dynamic macro fluid simulations, explosive powder particle VFX, and high-octane pacing."
+          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="protein-cover.jpg" alt="Optimum Nutrition Gold Standard Whey" style="object-position: center 45%;">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
+                <div class="play-btn-glass">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Commercial Video</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Optimum Nutrition — Gold Standard Whey</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Dynamic Commercial</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Macro Fluid Dynamics</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Product Explosion</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-energy sports performance spot showcasing dynamic macro fluid simulations and explosive powder VFX.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>Play Video Spot</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <!-- UGC Ads (1 card) -->
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="ugc"
+          data-type="video"
+          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786475817/UGS.mp4"
+          data-title="Celimax Skincare — UGC Conversational Ad"
+          data-category-label="UGC Ads"
+          data-tags='["UGC Avatar", "Lipsync AI", "E-Commerce Ad", "Skincare"]'
+          data-description="High-converting conversational UGC video ad with hyper-realistic AI avatar presenter, natural facial dynamics, synchronized lipsync, and direct-response copywriting."
+          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="celimax-ugc.jpg" alt="Celimax Skincare UGC Ad" style="object-position: center 35%;">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
+                <div class="play-btn-glass">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">UGC Ads</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Celimax Skincare — UGC Conversational Ad</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">UGC Avatar</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Lipsync AI</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Skincare</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-converting conversational UGC ad with hyper-realistic AI avatar presenter, natural facial dynamics & voiceover.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>Play Video Spot</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <!-- Product Photography (4 cards) -->
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="product"
+          data-type="gallery"
+          data-images='[
+            "assets/images/sol-de-janeiro/sol-2-beach-cover.jpg",
+            "assets/images/sol-de-janeiro/sol-1-white-background-hero.jpg",
+            "assets/images/sol-de-janeiro/sol-3-macro-texture.jpg",
+            "assets/images/sol-de-janeiro/sol-4-poolside-lifestyle.jpg",
+            "assets/images/sol-de-janeiro/sol-5-infographic-flatlay.jpg"
+          ]'
+          data-title="Sol de Janeiro — Brazilian Bum Bum Cream"
+          data-category-label="Product Photography"
+          data-tags='["Beauty & Cosmetics", "Swatch Macro", "Infographic Flatlay"]'
+          data-description="Premium commercial staging for body care cosmetics. Demonstrates vibrant tropical lighting, realistic sand and beach environment generation, macro cream swatches with ingredient highlights (pistachio, vanilla, guarana), and e-commerce product infographing."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/sol-de-janeiro/sol-2-beach-cover.jpg" alt="Sol de Janeiro Brazilian Bum Bum Cream">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Product Photography</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Sol de Janeiro — Brazilian Bum Bum Cream</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Beauty & Cosmetics</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Swatch Macro</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Infographic Flatlay</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Premium commercial staging for body care cosmetics with vibrant tropical lighting, sand environment & macro cream swatches.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="product"
+          data-type="gallery"
+          data-images='[
+            "assets/images/logitech-g435/logitech-2-floating-hero-splash.jpg",
+            "assets/images/logitech-g435/logitech-1-hero-stand.jpg",
+            "assets/images/logitech-g435/logitech-3-macro-mesh.jpg",
+            "assets/images/logitech-g435/logitech-4-back-top-logo.jpg",
+            "assets/images/logitech-g435/logitech-5-front-symmetric-dongle.jpg",
+            "assets/images/logitech-g435/logitech-6-gamer-rgb.jpg",
+            "assets/images/logitech-g435/logitech-7-urban-street-walk.jpg",
+            "assets/images/logitech-g435/logitech-8-cozy-couchstreaming.jpg",
+            "assets/images/logitech-g435/logitech-9-side-profile-natural.jpg"
+          ]'
+          data-title="Logitech G435 — Gaming & Lifestyle"
+          data-category-label="Product Photography"
+          data-tags='["Consumer Tech", "Studio Product Lighting", "Gaming Lifestyle"]'
+          data-description="Precision studio product photography for wireless gaming headsets. Showcases floating 3D-style hero compositions, neon ambient lighting, tactile mesh cushion macro details, and authentic gamer desktop lifestyle setups."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/logitech-g435/logitech-2-floating-hero-splash.jpg" alt="Logitech G435 — Gaming & Lifestyle">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Product Photography</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Logitech G435 — Gaming & Lifestyle</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Consumer Tech</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Studio Product Lighting</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Gaming Lifestyle</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Precision studio product photography for wireless gaming headsets with floating hero compositions & neon ambient lighting.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="product"
+          data-type="gallery"
+          data-images='[
+            "assets/images/nike-low/nike-low-2-sprint-action.jpg",
+            "assets/images/nike-low/nike-low-1-hero-shot.jpg",
+            "assets/images/nike-low/nike-low-3-jumpair-shot.jpg",
+            "assets/images/nike-low/nike-low-4-lifestyle-close.jpg",
+            "assets/images/nike-low/nike-low-5-still-life.jpg",
+            "assets/images/nike-low/nike-low-6-texture-close-up.jpg",
+            "assets/images/nike-low/nike-low-7-studio-pair.jpg",
+            "assets/images/nike-low/nike-low-8-studio-single-standing.jpg",
+            "assets/images/nike-low/nike-low-9-studio-flatlay.jpg"
+          ]'
+          data-title="Jordan Low — Footwear Showcase"
+          data-category-label="Product Photography"
+          data-tags='["Footwear & Sneakers", "Action Motion", "Urban Lifestyle"]'
+          data-description="High-impact sneaker commercial imagery. Highlights tactile suede and leather textures, dynamic action shots with ground dust motion, floating mirror reflections, and clean multi-angle studio e-commerce shots."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/nike-low/nike-low-2-sprint-action.jpg" alt="Jordan Low — Footwear Showcase" style="object-position: center 70%;">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Product Photography</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Jordan Low — Footwear Showcase</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Footwear & Sneakers</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Action Motion</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Urban Lifestyle</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-impact sneaker commercial imagery with tactile suede textures, dynamic ground dust motion & studio e-commerce angles.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="product"
+          data-type="gallery"
+          data-images='[
+            "assets/images/nova-fizz/nova-7-mango-explosion.jpg",
+            "assets/images/nova-fizz/nova-2-hero-splash.jpg",
+            "assets/images/nova-fizz/nova-3-close-up-refreshing.jpg",
+            "assets/images/nova-fizz/nova-4-ugc.jpg",
+            "assets/images/nova-fizz/nova-5-ingredients-flatlay.jpg",
+            "assets/images/nova-fizz/nova-6-action-pour-shot.jpg",
+            "assets/images/nova-fizz/nova-1-summer-lifestyle.jpg",
+            "assets/images/nova-fizz/nova-8-dynamic-sip.jpg"
+          ]'
+          data-title="Nova Fizz — Mango Blast Beverage"
+          data-category-label="Product Photography"
+          data-tags='["Beverage Commercial", "Liquid Splash Macro", "Outdoor Lifestyle"]'
+          data-description="Commercial AI Beverage Photoshoot created for a tropical soda brand. Features dynamic liquid splash macro photography, condensation droplet detail shots, ingredient flat-lays, and vibrant summer lifestyle staging."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/nova-fizz/nova-7-mango-explosion.jpg" alt="Nova Fizz — Mango Blast Beverage" style="object-position: center center;">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Product Photography</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Nova Fizz — Mango Blast Beverage</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Beverage Commercial</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Liquid Splash Macro</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Outdoor Lifestyle</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Commercial AI Beverage Photoshoot created for a tropical soda brand with liquid splash macro shots and summer staging.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <!-- Fashion & Lookbooks (3 cards) -->
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="fashion"
+          data-type="gallery"
+          data-images='[
+            "assets/images/pajamas/pajamas-3-medium.jpg",
+            "assets/images/pajamas/pajamas-1-front.jpg",
+            "assets/images/pajamas/pajamas-2-beauty.jpg",
+            "assets/images/pajamas/pajamas-4-back.jpg",
+            "assets/images/pajamas/pajamas-5-macro.jpg",
+            "assets/images/pajamas/pajamas-6-flatlay.jpg"
+          ]'
+          data-title="Cherry Blossom Pajamas — Studio Lookbook"
+          data-category-label="Fashion & Lookbooks"
+          data-tags='["Fashion Model Generation", "Studio Lighting", "Catalog Angles"]'
+          data-description="Studio E-Commerce Lookbook created for a sleepwear brand using AI. Demonstrates high model consistency across a full catalog set: full-body front view, close-up beauty shot, 3/4 angle, back view, macro lace texture details, and flat-lay product staging."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/pajamas/pajamas-3-medium.jpg" alt="Cherry Blossom Pajamas — Studio Lookbook" style="object-position: center 20%;">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Fashion & Lookbooks</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Cherry Blossom Pajamas — Studio Lookbook</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Fashion Model Generation</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Studio Lighting</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Catalog Angles</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Commercial AI Lookbook production for luxury sleepwear brand with consistent multi-angle catalog shots.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="fashion"
+          data-type="gallery"
+          data-images='[
+            "assets/images/nike-psg/nike-3-beauty.jpg",
+            "assets/images/nike-psg/nike-2-front.jpg",
+            "assets/images/nike-psg/nike-1-medium.jpg",
+            "assets/images/nike-psg/nike-4-back.jpg",
+            "assets/images/nike-psg/nike-5-macro.jpg",
+            "assets/images/nike-psg/nike-6-flatlay.jpg"
+          ]'
+          data-title="Nike Windrunner x PSG — Sportwear & Urban"
+          data-category-label="Fashion & Lookbooks"
+          data-tags='["Streetwear", "Fashion Model Consistency", "Lookbook"]'
+          data-description="Studio E-Commerce Lookbook created for sportswear brand using AI. Demonstrates high model consistency across a full catalog set: full-body front view, close-up beauty shot, 3/4 angle, back view, macro fabric texture details, and accurate brand logo staging."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/nike-psg/nike-3-beauty.jpg" alt="Nike Windrunner x PSG — Sportwear & Urban" style="object-position: center 15%;">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Fashion & Lookbooks</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Nike Windrunner x PSG — Sportwear & Urban</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Streetwear</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Fashion Model Consistency</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Lookbook</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Studio E-Commerce Lookbook created for sportswear brand using AI. High model consistency across a full catalog set.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="fashion"
+          data-type="gallery"
+          data-images='[
+            "assets/images/urban/urban-1-oblojka.jpg",
+            "assets/images/urban/urban-2-full-body.jpg",
+            "assets/images/urban/urban-3-kholodilnik.jpg",
+            "assets/images/urban/urban-4-back.jpg"
+          ]'
+          data-title="Urban Night Lifestyle — Streetwear"
+          data-category-label="Fashion & Lookbooks"
+          data-tags='["Urban Lifestyle", "Night Lighting", "Streetwear Photography"]'
+          data-description="Commercial AI Streetwear photoshoot set in a cinematic night-time urban environment. Features consistent AI model generation across multi-angle lifestyle shots: close-up portrait, full-body outfit presentation, side-profile interaction, and back-view branding detail against store neon reflections."
+          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="assets/images/urban/urban-1-oblojka.jpg" alt="Urban Night Lifestyle — Streetwear" style="object-position: center 30%;">
+              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                <span>Gallery</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Fashion & Lookbooks</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Urban Night Lifestyle — Streetwear</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Urban Lifestyle</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Night Lighting</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Streetwear Photography</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Cinematic night street style photography, neon reflections, and high-contrast urban fashion aesthetics.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>View Photo Gallery</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+        <!-- Short Films (1 card) -->
+        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
+          data-category="films"
+          data-type="video"
+          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786474315/TheFirstGuardian_FINAL_1080p_compressed.mp4"
+          data-title="The First Guardian — AI Sci-Fi Short Film"
+          data-category-label="Short Films"
+          data-tags='["Narrative Short Film", "Character Animation", "Worldbuilding"]'
+          data-description="Immersive sci-fi narrative short film featuring custom worldbuilding, AI character animation, orbital camera movements, and an epic orchestral soundtrack."
+          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
+          <div>
+            <div class="portfolio-card-img-wrapper relative">
+              <img src="ancient-echoes.jpg" alt="The First Guardian AI Short" style="object-position: center 35%;">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
+                <div class="play-btn-glass">
+                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Short Films</span>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">The First Guardian — AI Sci-Fi Short Film</h4>
+            <div class="flex flex-wrap gap-1.5 my-3">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Narrative Short Film</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Character Animation</span>
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Worldbuilding</span>
+            </div>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Immersive sci-fi narrative short film featuring custom worldbuilding, AI character animation, and epic orchestral score.</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
+            <span>Play Video Spot</span>
+            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacts Showcase Section (#contacts-section) -->
+  <section id="contacts-section" class="relative z-20 bg-[#000000] w-full py-10 sm:py-32 px-4 sm:px-8 lg:px-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto text-left">
+      
+      <!-- Section Header -->
+      <div class="flex items-center gap-3 mb-3 sm:mb-4">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5722] animate-pulse"></span>
+        <h3 class="text-xs font-mono tracking-widest uppercase text-white/70">
+          Direct Channels
+        </h3>
+      </div>
+      <h2 class="text-2xl sm:text-5xl font-bold text-white mb-3 sm:mb-4">
+        Connect & Collaborate
+      </h2>
+      <p class="text-white/60 text-sm sm:text-base max-w-3xl mb-6 sm:mb-12">
+        Select your preferred messenger or social platform below to send a direct message, discuss AI video spots, or request a visual project estimate.
+      </p>
+
+      <!-- Social & Messenger Grid (4 Cards: 2x2 on mobile, 4 columns on lg) -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        
+        <!-- Telegram Card -->
+        <a href="https://t.me/nedvedz" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#229ED9]/80 hover:bg-[#229ED9]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(34,158,217,0.25)] min-h-[135px] sm:min-h-[240px]">
+          <div>
+            <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#229ED9]/15 border border-[#229ED9]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#229ED9]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              </svg>
+            </div>
+            <h4 class="text-sm sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-[#229ED9] transition-colors">Telegram</h4>
+            <p class="text-[11px] sm:text-sm text-white/60 leading-tight sm:leading-relaxed mb-3 sm:mb-6 line-clamp-2 sm:line-clamp-none">Direct messaging & fast project discussions.</p>
+          </div>
+          <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-[#229ED9] group-hover:translate-x-1 transition-transform pt-2.5 sm:pt-4 border-t border-white/10">
+            <span>Chat on Telegram</span>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>
+        </a>
+
+        <!-- WhatsApp Card -->
+        <a href="https://wa.me/48573411275" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#25D366]/80 hover:bg-[#25D366]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(37,211,102,0.25)] min-h-[135px] sm:min-h-[240px]">
+          <div>
+            <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.67-1.622-.92-2.217-.243-.58-.49-.5-.67-.51-.172-.01-.369-.01-.567-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <h4 class="text-sm sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-[#25D366] transition-colors">WhatsApp</h4>
+            <p class="text-[11px] sm:text-sm text-white/60 leading-tight sm:leading-relaxed mb-3 sm:mb-6 line-clamp-2 sm:line-clamp-none">Messaging & project consulting.</p>
+          </div>
+          <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-[#25D366] group-hover:translate-x-1 transition-transform pt-2.5 sm:pt-4 border-t border-white/10">
+            <span>Message on WhatsApp</span>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>
+        </a>
+
+        <!-- Instagram Card -->
+        <a href="https://ig.me/m/hey_nmaks" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#E1306C]/80 hover:bg-[#E1306C]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(225,48,108,0.25)] min-h-[135px] sm:min-h-[240px]">
+          <div>
+            <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#E1306C]/15 border border-[#E1306C]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#E1306C]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </div>
+            <h4 class="text-sm sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-[#E1306C] transition-colors">Instagram</h4>
+            <p class="text-[11px] sm:text-sm text-white/60 leading-tight sm:leading-relaxed mb-3 sm:mb-6 line-clamp-2 sm:line-clamp-none">Visual drops, stories & DMs.</p>
+          </div>
+          <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-[#E1306C] group-hover:translate-x-1 transition-transform pt-2.5 sm:pt-4 border-t border-white/10">
+            <span>Follow & DM</span>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>
+        </a>
+
+        <!-- Discord Card -->
+        <a href="https://discord.com/users/maksaicreator_22987" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#5865F2]/80 hover:bg-[#5865F2]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(88,101,242,0.25)] min-h-[135px] sm:min-h-[240px]">
+          <div>
+            <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#5865F2]/15 border border-[#5865F2]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </div>
+            <h4 class="text-sm sm:text-xl font-bold text-white mb-1 sm:mb-2 group-hover:text-[#5865F2] transition-colors">Discord</h4>
+            <p class="text-[11px] sm:text-sm text-white/60 leading-tight sm:leading-relaxed mb-3 sm:mb-6 line-clamp-2 sm:line-clamp-none">Text messaging & feedback.</p>
+          </div>
+          <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-[#5865F2] group-hover:translate-x-1 transition-transform pt-2.5 sm:pt-4 border-t border-white/10">
+            <span>Connect on Discord</span>
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Project Lightbox Modal (#project-modal) -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 md:p-6 modal-backdrop transition-all duration-300" onclick="handleModalBackdropClick(event)">
+    <div class="w-full max-w-4xl bg-[#0d0d0d] border border-white/15 rounded-2xl sm:rounded-3xl relative shadow-2xl overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] text-left">
+      <!-- Close Button -->
+      <button onclick="closeProjectModal(event)" class="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/75 hover:bg-black border border-white/20 text-white flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg" title="Close (Esc)">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Media Block (Top) -->
+      <div class="w-full h-[250px] sm:h-[380px] md:h-[450px] max-h-[50vh] sm:max-h-[60vh] bg-[#050505] relative flex items-center justify-center overflow-hidden shrink-0 border-b border-white/10">
+        <video id="modal-video" controls autoplay class="w-full h-full max-h-[50vh] sm:max-h-[60vh] object-contain hidden"></video>
+
+        <!-- Video Replay Overlay Button -->
+        <div id="modal-video-replay-btn" class="absolute inset-0 z-30 hidden items-center justify-center bg-black/50 backdrop-blur-xs pointer-events-none transition-all duration-300">
+          <div onclick="playModalVideo(event)" class="play-btn-glass scale-110 sm:scale-125 hover:scale-135 pointer-events-auto cursor-pointer transition-transform duration-300 shadow-[0_0_25px_rgba(255,87,34,0.6)]">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
+          </div>
+        </div>
+
+        <div id="modal-gallery" class="relative w-full h-full flex items-center justify-center bg-[#050505] hidden">
+          <img id="modal-gallery-img" src="" alt="Gallery slide" class="w-full h-full max-h-[50vh] sm:max-h-[60vh] object-contain transition-opacity duration-300" style="object-fit: contain !important;">
+          
+          <button onclick="prevGalleryImage(event)" class="modal-gallery-arrow absolute left-2 sm:left-4 z-20 transition-all cursor-pointer shadow-lg active:scale-90" title="Previous Image">
+            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+          </button>
+
+          <button onclick="nextGalleryImage(event)" class="modal-gallery-arrow absolute right-2 sm:right-4 z-20 transition-all cursor-pointer shadow-lg active:scale-90" title="Next Image">
+            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+          </button>
+
+          <div id="modal-gallery-counter" class="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-black/80 backdrop-blur-md text-[11px] sm:text-xs font-mono text-white/90 border border-white/10 shadow-md">
+            1 / 1
+          </div>
+        </div>
+      </div>
+
+      <!-- Information Block (Bottom) -->
+      <div class="modal-content-container p-4 sm:p-6 overflow-y-auto space-y-3.5 sm:space-y-4 flex-1 text-left">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span id="modal-category" class="text-xs font-mono text-[#ff5722] tracking-wider uppercase font-semibold"></span>
+            <span class="text-white/30">•</span>
+            <span id="modal-type-badge" class="text-xs font-mono text-white/60 uppercase"></span>
+          </div>
+          <h3 id="modal-title" class="text-2xl font-bold text-white mb-2.5"></h3>
+          <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <h4 class="text-[11px] font-mono uppercase tracking-widest text-white/50 mb-1.5">Project Overview</h4>
+          <p id="modal-description" class="text-white/80 text-sm sm:text-base leading-relaxed"></p>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 mb-2 text-[#ff5722]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>
+            <h4 class="text-[11px] font-mono uppercase tracking-widest text-white font-semibold">AI Tools & Tech Stack</h4>
+          </div>
+          <div id="modal-tools" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 flex items-center justify-between flex-wrap gap-3">
+          <span class="text-xs text-white/50 font-mono">Ready to create similar visuals for your brand?</span>
+          <button onclick="closeProjectModal(); openContactModal();" class="bg-[#ff5722] hover:bg-[#ff5722]/90 text-white font-semibold py-2.5 px-5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#ff5722]/20 text-sm">
+            <span>Inquire About Similar Project</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Modal (#contact-modal) -->
+  <div id="contact-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 modal-backdrop transition-all duration-300" onclick="handleContactModalBackdropClick(event)">
+    <div class="w-full max-w-sm sm:max-w-lg bg-[#0d0d0d] border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-8 relative shadow-2xl overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[90vh] text-left">
+      <!-- Close Button -->
+      <button onclick="closeContactModal(event)" class="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-50 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black/70 hover:bg-black border border-white/20 text-white flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg" title="Close (Esc)">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="mb-3.5 sm:mb-6 pr-7 sm:pr-8">
+        <div class="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+          <span class="w-2 h-2 rounded-full bg-[#ff5722] animate-pulse"></span>
+          <span class="text-[10px] sm:text-xs font-mono text-[#ff5722] tracking-widest uppercase font-semibold">Direct Communication</span>
+        </div>
+        <h3 class="text-xl sm:text-3xl font-bold text-white tracking-tight">
+          Get in Touch
+        </h3>
+        <p class="text-white/60 text-[11px] sm:text-sm mt-0.5 sm:mt-1 leading-tight sm:leading-relaxed">
+          Select your preferred messenger or social platform below to chat directly and discuss your visual project.
+        </p>
+      </div>
+
+      <!-- Vertical Stacked Messenger Cards -->
+      <div class="space-y-2 sm:space-y-3.5 overflow-y-auto pr-0.5 sm:pr-1">
+        
+        <!-- Telegram Card -->
+        <a href="https://t.me/nedvedz" target="_blank" rel="noopener noreferrer" class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#229ED9]/80 hover:bg-[#229ED9]/10 transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-[0_0_20px_rgba(34,158,217,0.2)]">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[#229ED9]/15 border border-[#229ED9]/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-6 sm:h-6 text-[#229ED9]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#229ED9] transition-colors">Telegram</h4>
+              <p class="text-[10.5px] sm:text-xs text-white/60 leading-tight sm:leading-snug">Direct messaging, rapid project discussions & file sharing.</p>
+            </div>
+          </div>
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#229ED9] group-hover:translate-x-1 transition-transform shrink-0 ml-1.5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- WhatsApp Card -->
+        <a href="https://wa.me/48573411275" target="_blank" rel="noopener noreferrer" class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#25D366]/80 hover:bg-[#25D366]/10 transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-[0_0_20px_rgba(37,211,102,0.2)]">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-6 sm:h-6 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.67-1.622-.92-2.217-.243-.58-.49-.5-.67-.51-.172-.01-.369-.01-.567-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#25D366] transition-colors">WhatsApp</h4>
+              <p class="text-[10.5px] sm:text-xs text-white/60 leading-tight sm:leading-snug">Text-only messaging & commercial project consulting.</p>
+            </div>
+          </div>
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#25D366] group-hover:translate-x-1 transition-transform shrink-0 ml-1.5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Instagram Card -->
+        <a href="https://ig.me/m/hey_nmaks" target="_blank" rel="noopener noreferrer" class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#E1306C]/80 hover:bg-[#E1306C]/10 transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-[0_0_20px_rgba(225,48,108,0.2)]">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[#E1306C]/15 border border-[#E1306C]/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-4.5 h-4.5 sm:w-6 sm:h-6 text-[#E1306C]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#E1306C] transition-colors">Instagram</h4>
+              <p class="text-[10.5px] sm:text-xs text-white/60 leading-tight sm:leading-snug">Latest visual drops, creative stories & direct DMs.</p>
+            </div>
+          </div>
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#E1306C] group-hover:translate-x-1 transition-transform shrink-0 ml-1.5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Discord Card -->
+        <a href="https://discord.com/users/maksaicreator_22987" target="_blank" rel="noopener noreferrer" class="group p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#5865F2]/80 hover:bg-[#5865F2]/10 transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-[0_0_20px_rgba(88,101,242,0.2)]">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[#5865F2]/15 border border-[#5865F2]/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-5 h-5 sm:w-7 sm:h-7 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[#5865F2] transition-colors">Discord</h4>
+              <p class="text-[10.5px] sm:text-xs text-white/60 leading-tight sm:leading-snug">Text messaging, project feedback & asset exchange.</p>
+            </div>
+          </div>
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-[#5865F2] group-hover:translate-x-1 transition-transform shrink-0 ml-1.5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FRAME_COUNT = 110;
+    const canvas = document.getElementById('scroll-canvas');
+    const ctx = canvas.getContext('2d');
+    const loader = document.getElementById('loader');
+    const introSection = document.getElementById('intro-section');
+
+    function getFramePaths(index) {
+      const padded = String(index).padStart(3, '0');
+      const filename = `ezgif-frame-${padded}.jpg`;
+      return [
+        `./${filename}`,
+        `./Scroll foto/${filename}`,
+        `./Scroll%20foto/${filename}`
+      ];
+    }
+
+    const images = [];
+    let loadedCount = 0;
+    let targetFrame = 0;
+    let currentFrame = 0;
+    let lastRenderedFrame = -1;
+
+    function loadImage(index) {
+      return new Promise((resolve) => {
+        const paths = getFramePaths(index);
+        let pathIdx = 0;
+        const img = new Image();
+
+        function tryNextPath() {
+          if (pathIdx >= paths.length) {
+            console.error(`Failed to load frame ${index}`);
+            resolve(img);
+            return;
+          }
+          img.src = paths[pathIdx++];
+        }
+
+        img.onload = () => {
+          loadedCount++;
+          if (index === 1) renderFrame(0);
+          if (loadedCount >= FRAME_COUNT) loader.classList.add('hidden');
+          resolve(img);
+        };
+
+        img.onerror = () => {
+          tryNextPath();
+        };
+
+        tryNextPath();
+      });
+    }
+
+    for (let i = 1; i <= FRAME_COUNT; i++) {
+      images.push(loadImage(i));
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      lastRenderedFrame = -1;
+      renderFrame(Math.round(currentFrame));
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    async function renderFrame(index) {
+      const clampedIndex = Math.min(FRAME_COUNT - 1, Math.max(0, index));
+      const img = await images[clampedIndex];
+
+      if (img && img.complete && img.naturalWidth > 0) {
+        const cWidth = canvas.width;
+        const cHeight = canvas.height;
+
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, cWidth, cHeight);
+
+        const windowW = window.innerWidth;
+        const isDesktop = windowW > 1024; // Desktop (from 1025px+)
+        const isMobilePhone = windowW < 640; // Mobile Smartphones ONLY (< 640px)
+
+        if (isDesktop) {
+          // Desktop (from 1025px+): 100% Static background character photo (center top alignment)
+          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
+          const imgW = staticImg.naturalWidth || 1920;
+          const imgH = staticImg.naturalHeight || 1080;
+
+          const maxAllowedH = cHeight * 0.88;
+          const baseScale = Math.min(cWidth / imgW, maxAllowedH / imgH);
+
+          const renderW = imgW * baseScale;
+          const renderH = imgH * baseScale;
+
+          const offsetX = (cWidth - renderW) / 2;
+          const offsetY = cHeight * 0.09;
+
+          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+        } else if (isMobilePhone) {
+          // Mobile Smartphones ONLY (< 640px: iPhone, Galaxy, etc.):
+          // 1. Shift character face right towards right 20% edge (background-position: 80% center / right 20% center)
+          // 2. Creates generous dark background space on the left for left-aligned Hero text block
+          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
+          const imgW = staticImg.naturalWidth || 1920;
+          const imgH = staticImg.naturalHeight || 1080;
+
+          // Scale so image height is ~95% of viewport and width is ~142% of screen width
+          const scale = Math.max((cWidth * 1.42) / imgW, (cHeight * 0.95) / imgH);
+          const renderW = imgW * scale;
+          const renderH = imgH * scale;
+
+          // Shift face right to 80% center / right 20% position
+          const offsetX = (cWidth - renderW) / 2 + (cWidth * 0.32);
+          const offsetY = cHeight * 0.05;
+
+          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+        } else {
+          // iPads & Tablets (640px - 1024px: iPad Pro, iPad Air, iPad Mini):
+          const staticImg = (images[0] && images[0].complete && images[0].naturalWidth > 0) ? images[0] : img;
+          const imgW = staticImg.naturalWidth || 1920;
+          const imgH = staticImg.naturalHeight || 1080;
+
+          const scale = Math.max((cWidth * 1.35) / imgW, (cHeight * 0.95) / imgH);
+          const renderW = imgW * scale;
+          const renderH = imgH * scale;
+
+          const offsetX = (cWidth - renderW) / 2 + (cWidth * 0.25);
+          const offsetY = cHeight * 0.05;
+
+          ctx.drawImage(staticImg, offsetX, offsetY, renderW, renderH);
+        }
+
+        lastRenderedFrame = clampedIndex;
+      }
+    }
+
+    function updateTargetFrame() {
+      if (!introSection) return;
+      const rect = introSection.getBoundingClientRect();
+      const totalHeight = introSection.offsetHeight;
+      const maxScroll = totalHeight - window.innerHeight;
+
+      if (maxScroll <= 0) return;
+      const currentScroll = Math.max(0, -rect.top);
+
+      const scrollFraction = Math.max(0, Math.min(1, currentScroll / maxScroll));
+      targetFrame = scrollFraction * (FRAME_COUNT - 1);
+    }
+
+    let mobileStickyOpacity = 1;
+    let mobileStickyTranslateY = 0;
+
+    function updateMobileStickyScroll() {
+      const windowW = window.innerWidth;
+      const canvasBg = document.getElementById('canvas-fixed-bg');
+      if (!canvasBg) return;
+
+      if (windowW >= 1024) {
+        canvasBg.style.opacity = '1';
+        canvasBg.style.transform = 'none';
+        mobileStickyOpacity = 1;
+        mobileStickyTranslateY = 0;
+        return;
+      }
+
+      // Mobile & Tablet (< 1024px): Ultra-smooth inertial scroll & 20% early fade out before #portfolio
+      const portfolioEl = document.getElementById('portfolio');
+      if (!portfolioEl) return;
+
+      const portfolioRect = portfolioEl.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // Start fade 20% before portfolio reaches top (fade window: 1.25 * vh down to 0.10 * vh)
+      const fadeStart = vh * 1.25;
+      const fadeEnd = vh * 0.10;
+
+      let targetOpacity = 1;
+      let targetY = 0;
+
+      if (portfolioRect.top < fadeStart) {
+        const rawProgress = Math.max(0, Math.min(1, (portfolioRect.top - fadeEnd) / (fadeStart - fadeEnd)));
+        // Smooth ease-out power curve (power2.out equivalent)
+        targetOpacity = Math.pow(rawProgress, 1.4);
+        targetY = -((1 - targetOpacity) * 35);
+      }
+
+      // Inertial LERP smoothing (smooth scrub factor 0.12)
+      mobileStickyOpacity += (targetOpacity - mobileStickyOpacity) * 0.12;
+      mobileStickyTranslateY += (targetY - mobileStickyTranslateY) * 0.12;
+
+      canvasBg.style.opacity = mobileStickyOpacity.toFixed(3);
+      canvasBg.style.transform = `translate3d(0, ${mobileStickyTranslateY.toFixed(2)}px, 0)`;
+    }
+
+    function animationLoop() {
+      updateTargetFrame();
+      updateMobileStickyScroll();
+      const diff = targetFrame - currentFrame;
+      if (Math.abs(diff) > 0.001) {
+        currentFrame += diff * 0.08;
+        const frameToDraw = Math.round(currentFrame);
+        if (frameToDraw !== lastRenderedFrame) {
+          renderFrame(frameToDraw);
+        }
+      }
+      requestAnimationFrame(animationLoop);
+    }
+
+    function filterPortfolio(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-[#ff5722]', 'text-white', 'border-[#ff5722]', 'shadow-lg', 'shadow-[#ff5722]/25', 'scale-[1.03]', 'active');
+        b.classList.add('bg-white/5', 'text-white/70', 'border-white/10', 'hover:border-white/30', 'hover:text-white', 'hover:bg-white/10');
+      });
+
+      btn.classList.remove('bg-white/5', 'text-white/70', 'border-white/10', 'hover:border-white/30', 'hover:text-white', 'hover:bg-white/10');
+      btn.classList.add('bg-[#ff5722]', 'text-white', 'border-[#ff5722]', 'shadow-lg', 'shadow-[#ff5722]/25', 'scale-[1.03]', 'active');
+
+      const cards = document.querySelectorAll('.portfolio-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.classList.remove('hidden-card');
+        } else {
+          card.classList.add('hidden-card');
+        }
+      });
+
+      if (btn && window.innerWidth < 640) {
+        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      updateFilterScrollIndicator();
+    }
+
+    function updateFilterScrollIndicator() {
+      const container = document.getElementById('filter-bar-container');
+      const thumb = document.getElementById('filter-scroll-thumb');
+      if (!container || !thumb) return;
+
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      if (maxScroll <= 0) {
+        thumb.style.width = '100%';
+        thumb.style.left = '0%';
+        return;
+      }
+
+      const scrollLeft = container.scrollLeft;
+      const scrollRatio = Math.min(1, Math.max(0, scrollLeft / maxScroll));
+
+      const thumbWidth = 35;
+      const leftPos = scrollRatio * (100 - thumbWidth);
+      thumb.style.left = `${leftPos}%`;
+      thumb.style.width = `${thumbWidth}%`;
+    }
+
+    function initFilterScrollIndicator() {
+      const container = document.getElementById('filter-bar-container');
+      const track = document.getElementById('filter-scroll-track');
+      if (!container) return;
+
+      container.addEventListener('scroll', updateFilterScrollIndicator, { passive: true });
+      window.addEventListener('resize', updateFilterScrollIndicator, { passive: true });
+
+      if (track) {
+        const handleTrackInteraction = (e) => {
+          const rect = track.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clickRatio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+          const maxScroll = container.scrollWidth - container.clientWidth;
+          container.scrollTo({ left: clickRatio * maxScroll, behavior: 'smooth' });
+        };
+        track.addEventListener('click', handleTrackInteraction);
+      }
+
+      updateFilterScrollIndicator();
+    }
+
+    function setActiveNav(id) {
+      const items = {
+        'home': document.getElementById('nav-home'),
+        'about': document.getElementById('nav-about'),
+        'portfolio': document.getElementById('nav-portfolio'),
+        'contacts': document.getElementById('nav-contacts')
+      };
+      Object.keys(items).forEach(key => {
+        const item = items[key];
+        if (!item) return;
+        if (key === id) {
+          item.classList.add('text-[#ff5722]', 'font-semibold', 'is-active');
+          item.classList.remove('text-white/70', 'text-white');
+          if (document.activeElement === item) item.blur();
+        } else {
+          item.classList.remove('text-[#ff5722]', 'font-semibold', 'is-active', 'text-white');
+          item.classList.add('text-white/70');
+        }
+      });
+    }
+
+    function scrollToSection(id) {
+      setActiveNav(id);
+      if (id === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (id === 'about') {
+        document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (id === 'portfolio') {
+        document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (id === 'contacts') {
+        document.getElementById('contacts-section')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    /* Modal JavaScript Logic */
+    let currentGalleryImages = [];
+    let currentGalleryIdx = 0;
+
+    function openProjectModalFromCard(card) {
+      const type = card.dataset.type || 'gallery';
+      const title = card.dataset.title || '';
+      const categoryLabel = card.dataset.categoryLabel || '';
+      const description = card.dataset.description || '';
+      const videoSrc = card.dataset.videoSrc || '';
+      const imagesJson = card.dataset.images || '[]';
+      const tagsJson = card.dataset.tags || '[]';
+      const toolsJson = card.dataset.tools || '[]';
+
+      const modal = document.getElementById('project-modal');
+      const videoEl = document.getElementById('modal-video');
+      const galleryEl = document.getElementById('modal-gallery');
+      const replayBtn = document.getElementById('modal-video-replay-btn');
+
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-category').textContent = categoryLabel;
+      document.getElementById('modal-type-badge').textContent = type === 'video' ? 'Commercial Video Spot' : 'Photo Lookbook Gallery';
+      document.getElementById('modal-description').textContent = description;
+
+      // Render Tags
+      try {
+        const tags = JSON.parse(tagsJson);
+        document.getElementById('modal-tags').innerHTML = tags.map(t => `<span class="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/80">${t}</span>`).join('');
+      } catch(e) {}
+
+      // Render Tools
+      try {
+        const tools = JSON.parse(toolsJson);
+        document.getElementById('modal-tools').innerHTML = tools.map(t => `<span class="text-xs font-mono px-3 py-1.5 rounded-xl bg-[#ff5722]/10 border border-[#ff5722]/30 text-[#ff5722] font-medium">${t}</span>`).join('');
+      } catch(e) {}
+
+      if (type === 'video') {
+        galleryEl.classList.add('hidden');
+        videoEl.classList.remove('hidden');
+        if (replayBtn) {
+          replayBtn.classList.add('hidden');
+          replayBtn.classList.remove('flex');
+        }
+        videoEl.removeAttribute('loop');
+        videoEl.loop = false;
+        videoEl.src = videoSrc;
+        videoEl.currentTime = 0;
+
+        videoEl.onended = function() {
+          videoEl.currentTime = 0;
+          if (replayBtn) {
+            replayBtn.classList.remove('hidden');
+            replayBtn.classList.add('flex');
+          }
+        };
+
+        videoEl.play().catch(e => console.log('Autoplay prevented:', e));
+      } else {
+        videoEl.pause();
+        videoEl.currentTime = 0;
+        videoEl.onended = null;
+        videoEl.classList.add('hidden');
+        if (replayBtn) {
+          replayBtn.classList.add('hidden');
+          replayBtn.classList.remove('flex');
+        }
+        galleryEl.classList.remove('hidden');
+        try {
+          currentGalleryImages = JSON.parse(imagesJson);
+        } catch(e) {
+          currentGalleryImages = [];
+        }
+        const initialIdx = parseInt(card.dataset.currentIndex || '0', 10);
+        currentGalleryIdx = (!isNaN(initialIdx) && initialIdx >= 0 && initialIdx < currentGalleryImages.length) ? initialIdx : 0;
+        updateGalleryDisplay();
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function changeCardSlide(event, btn, direction) {
+      if (event) event.stopPropagation();
+      const card = btn.closest('.portfolio-card');
+      if (!card) return;
+
+      let images = [];
+      try {
+        images = JSON.parse(card.dataset.images || '[]');
+      } catch(e) {}
+
+      if (images.length <= 1) return;
+
+      let currentIdx = parseInt(card.dataset.currentIndex || '0', 10);
+      currentIdx = (currentIdx + direction + images.length) % images.length;
+      card.dataset.currentIndex = currentIdx;
+
+      const imgEl = card.querySelector('.portfolio-card-img-wrapper img');
+      const counterText = card.querySelector('.card-counter-text');
+
+      if (imgEl) {
+        imgEl.src = images[currentIdx];
+      }
+      if (counterText) {
+        counterText.textContent = `${currentIdx + 1} / ${images.length}`;
+      }
+    }
+
+    function updateGalleryDisplay() {
+      if (!currentGalleryImages || currentGalleryImages.length === 0) return;
+      const imgEl = document.getElementById('modal-gallery-img');
+      const counterEl = document.getElementById('modal-gallery-counter');
+      imgEl.src = currentGalleryImages[currentGalleryIdx];
+      counterEl.textContent = `${currentGalleryIdx + 1} / ${currentGalleryImages.length}`;
+    }
+
+    function prevGalleryImage(e) {
+      if (e) e.stopPropagation();
+      if (currentGalleryImages.length <= 1) return;
+      currentGalleryIdx = currentGalleryIdx > 0 ? currentGalleryIdx - 1 : currentGalleryImages.length - 1;
+      updateGalleryDisplay();
+    }
+
+    function nextGalleryImage(e) {
+      if (e) e.stopPropagation();
+      if (currentGalleryImages.length <= 1) return;
+      currentGalleryIdx = currentGalleryIdx < currentGalleryImages.length - 1 ? currentGalleryIdx + 1 : 0;
+      updateGalleryDisplay();
+    }
+
+    function playModalVideo(e) {
+      if (e) e.stopPropagation();
+      const videoEl = document.getElementById('modal-video');
+      const replayBtn = document.getElementById('modal-video-replay-btn');
+      if (videoEl) {
+        if (replayBtn) {
+          replayBtn.classList.add('hidden');
+          replayBtn.classList.remove('flex');
+        }
+        videoEl.currentTime = 0;
+        videoEl.play();
+      }
+    }
+
+    function closeProjectModal(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('project-modal');
+      const videoEl = document.getElementById('modal-video');
+      const replayBtn = document.getElementById('modal-video-replay-btn');
+      if (videoEl) {
+        videoEl.pause();
+        videoEl.currentTime = 0;
+        videoEl.onended = null;
+      }
+      if (replayBtn) {
+        replayBtn.classList.add('hidden');
+        replayBtn.classList.remove('flex');
+      }
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleModalBackdropClick(e) {
+      if (e.target.id === 'project-modal') {
+        closeProjectModal();
+      }
+    }
+
+    function openContactModal() {
+      const modal = document.getElementById('contact-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeContactModal(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('contact-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleContactModalBackdropClick(e) {
+      if (e && e.target.id === 'contact-modal') {
+        closeContactModal(e);
+      }
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) {
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          menu.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+        } else {
+          closeMobileMenu();
+        }
+      }
+    }
+
+    function closeMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    }
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    function initGalleryTouchSwipes() {
+      const modal = document.getElementById('project-modal');
+      if (!modal) return;
+
+      modal.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches.length === 1) {
+          const deltaX = e.changedTouches[0].clientX - touchStartX;
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+          if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            const galleryEl = document.getElementById('modal-gallery');
+            if (galleryEl && !galleryEl.classList.contains('hidden')) {
+              if (deltaX < 0) {
+                nextGalleryImage();
+              } else {
+                prevGalleryImage();
+              }
+            }
+          }
+        }
+      }, { passive: true });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeProjectModal();
+        closeContactModal();
+        closeMobileMenu();
+      } else if (!document.getElementById('project-modal').classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') prevGalleryImage();
+        if (e.key === 'ArrowRight') nextGalleryImage();
+      }
+    });
+
+    function updateScrollspy() {
+      const aboutEl = document.getElementById('about-section');
+      const portfolioEl = document.getElementById('portfolio');
+      const contactsEl = document.getElementById('contacts-section');
+
+      const vh = window.innerHeight;
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+      // 1. Contacts section: Activate as soon as #contacts-section enters lower 30% of screen (top <= 70% vh) or page bottom reached
+      if (contactsEl) {
+        const contactsRect = contactsEl.getBoundingClientRect();
+        const isNearBottom = (scrollY + vh) >= (docHeight - 100);
+        if (contactsRect.top <= vh * 0.70 || isNearBottom) {
+          setActiveNav('contacts');
+          return;
+        }
+      }
+
+      // 2. Portfolio section: Active only while portfolio cards are inside active viewport range
+      if (portfolioEl) {
+        const portfolioRect = portfolioEl.getBoundingClientRect();
+        if (portfolioRect.top <= vh * 0.55 && portfolioRect.bottom >= vh * 0.20) {
+          setActiveNav('portfolio');
+          return;
+        }
+      }
+
+      // 3. About section: Active while about section is inside active viewport range
+      if (aboutEl) {
+        const aboutRect = aboutEl.getBoundingClientRect();
+        if (aboutRect.top <= vh * 0.55 && aboutRect.bottom >= vh * 0.20) {
+          setActiveNav('about');
+          return;
+        }
+      }
+
+      // 4. Default to Home
+      setActiveNav('home');
+    }
+
+    window.addEventListener('scroll', updateScrollspy, { passive: true });
+    window.addEventListener('resize', updateScrollspy, { passive: true });
+
+    resizeCanvas();
+    initGalleryTouchSwipes();
+    initFilterScrollIndicator();
+    requestAnimationFrame(animationLoop);
+  </script>
+</body>
+</html>
