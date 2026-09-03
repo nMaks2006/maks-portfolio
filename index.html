@@ -865,8 +865,8 @@
           <button onclick="filterPortfolio('films', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="films">Short Films</button>
         </div>
 
-        <!-- Filter Scroll Indicator Slider (Visible on Mobile & Tablets iPad Mini/Air < 1024px) -->
-        <div class="block lg:hidden mt-2.5 px-0.5">
+        <!-- Filter Scroll Indicator Slider (Visible on Mobile & Tablets including iPad Pro < 1536px) -->
+        <div id="filter-scroll-slider-wrapper" class="block 2xl:hidden mt-2.5 px-0.5 transition-opacity duration-300">
           <div class="flex items-center gap-1 text-[11px] text-white/50 font-mono mb-1.5">
             <span>Swipe filters</span>
             <svg class="w-3.5 h-3.5 text-[#ff5722] animate-pulse inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -2183,13 +2183,15 @@
     function updateFilterScrollIndicator() {
       const container = document.getElementById('filter-bar-container');
       const thumb = document.getElementById('filter-scroll-thumb');
+      const wrapper = document.getElementById('filter-scroll-slider-wrapper');
       if (!container || !thumb) return;
 
       const maxScroll = container.scrollWidth - container.clientWidth;
-      if (maxScroll <= 0) {
-        thumb.style.width = '100%';
-        thumb.style.left = '0%';
+      if (maxScroll <= 5) {
+        if (wrapper) wrapper.style.opacity = '0';
         return;
+      } else {
+        if (wrapper) wrapper.style.opacity = '1';
       }
 
       const scrollLeft = container.scrollLeft;
