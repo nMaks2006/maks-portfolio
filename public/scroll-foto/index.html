@@ -880,7 +880,7 @@
           data-title="Times Square — FOOH CGI Billboard Takeover"
           data-category-label="Commercial Video"
           data-tags='["FOOH CGI", "Times Square Billboard", "Commercial Spot", "Brand Takeover"]'
-          data-description="High-impact architectural commercial spot featuring a massive fabric banner unrolling down a modern glass skyscraper facade with dynamic lighting, spatial camera motion, and photorealistic 3D physics simulation."
+          data-description="High-impact FOOH CGI commercial spot featuring a massive canvas banner unrolling across a Times Square billboard. Demonstrates dynamic fabric physics, photorealistic urban lighting, and seamless environment integration — proving global-scale advertising is possible without on-site filming or physical studio budgets."
           data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop"]'>
           <div>
             <div class="portfolio-card-img-wrapper relative">
@@ -903,7 +903,7 @@
               <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Times Square Billboard</span>
               <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Commercial Spot</span>
             </div>
-            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-impact architectural commercial spot featuring a massive fabric banner unrolling down a glass skyscraper facade.</p>
+            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">High-impact FOOH CGI commercial spot featuring a massive canvas banner unrolling across a Times Square billboard.</p>
           </div>
           <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
             <span>Play Video Spot</span>
@@ -1383,6 +1383,7 @@
         <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
           data-category="retouch"
           data-type="gallery"
+          data-type-label="BEFORE / AFTER SHOWCASE"
           data-images='[
             {"src": "/images/AI Retouch & Styling/1.jpg", "caption": "iPhone Motion Blur (Before / After)"},
             {"src": "/images/AI Retouch & Styling/2.jpg", "caption": "Cinematic Color Grade (Before / After)"},
@@ -2248,7 +2249,8 @@
 
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-category').textContent = categoryLabel;
-      document.getElementById('modal-type-badge').textContent = type === 'video' ? 'Commercial Video Spot' : 'Photo Lookbook Gallery';
+      const defaultTypeBadge = type === 'video' ? 'Commercial Video Spot' : 'Photo Lookbook Gallery';
+      document.getElementById('modal-type-badge').textContent = card.dataset.typeLabel || defaultTypeBadge;
       document.getElementById('modal-description').textContent = description;
 
       // Render Tags
