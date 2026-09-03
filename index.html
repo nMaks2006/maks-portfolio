@@ -367,6 +367,7 @@
 
     /* Glassmorphism Gallery Arrows in Modal (44x44px Touch friendly & responsive) */
     .modal-gallery-arrow {
+      display: none !important;
       min-width: 44px;
       min-height: 44px;
       width: 44px;
@@ -1370,16 +1371,16 @@
           data-category="retouch"
           data-type="gallery"
           data-images='[
-            {"src": "/images/AI Retouch & Styling/1.jpg", "caption": "iPhone Motion Blur (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/2.jpg", "caption": "Cinematic Color Grade (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/3.jpg", "caption": "Dark Aesthetic Film (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/4.jpg", "caption": "4K Resolution Upscale (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/5.jpg", "caption": "Night Vision Effect (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/6.jpg", "caption": "2000s Retro Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/7.jpg", "caption": "GTA V Art Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/8.jpg", "caption": "Particle Effect (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/9.jpg", "caption": "CCTV Camera Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/10.jpg", "caption": "FLIR Thermal Vision (Before / After)"}
+            "/images/AI Retouch & Styling/1.jpg",
+            "/images/AI Retouch & Styling/2.jpg",
+            "/images/AI Retouch & Styling/3.jpg",
+            "/images/AI Retouch & Styling/4.jpg",
+            "/images/AI Retouch & Styling/5.jpg",
+            "/images/AI Retouch & Styling/6.jpg",
+            "/images/AI Retouch & Styling/7.jpg",
+            "/images/AI Retouch & Styling/8.jpg",
+            "/images/AI Retouch & Styling/9.jpg",
+            "/images/AI Retouch & Styling/10.jpg"
           ]'
           data-title="Neural Post-Processing & Visual FX Suite"
           data-category-label="AI Retouch & Styling"
@@ -1748,7 +1749,7 @@
         </div>
 
         <div id="modal-gallery" class="relative w-full h-full flex items-center justify-center bg-[#050505] hidden">
-          <img id="modal-gallery-img" src="" alt="Gallery slide" class="w-full h-full object-contain transition-opacity duration-300" style="object-fit: contain !important;">
+          <img id="modal-gallery-img" src="" alt="Gallery slide" onclick="nextGalleryImage(event)" class="w-full h-full object-contain transition-opacity duration-300 cursor-pointer" style="object-fit: contain !important;">
           
           <button onclick="prevGalleryImage(event)" class="modal-gallery-arrow absolute left-2 sm:left-4 z-20 transition-all cursor-pointer shadow-lg active:scale-90" title="Previous Image">
             <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -2368,11 +2369,8 @@
       const counterEl = document.getElementById('modal-gallery-counter');
       const item = currentGalleryImages[currentGalleryIdx];
       const src = typeof item === 'string' ? item : item.src;
-      const caption = (typeof item === 'object' && item.caption) ? item.caption : '';
       imgEl.src = src;
-      counterEl.textContent = caption 
-        ? `${currentGalleryIdx + 1} / ${currentGalleryImages.length} • ${caption}`
-        : `${currentGalleryIdx + 1} / ${currentGalleryImages.length}`;
+      counterEl.textContent = `${currentGalleryIdx + 1} / ${currentGalleryImages.length}`;
     }
 
     function prevGalleryImage(e) {
