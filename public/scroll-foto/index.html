@@ -852,8 +852,6 @@
           <button onclick="filterPortfolio('ugc', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="ugc">UGC Ads</button>
           <button onclick="filterPortfolio('product', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="product">Product Photography</button>
           <button onclick="filterPortfolio('fashion', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="fashion">Fashion & Lookbooks</button>
-          <button onclick="filterPortfolio('retouch', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="retouch">AI Retouch & Styling</button>
-          <button onclick="filterPortfolio('films', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="films">Short Films</button>
         </div>
 
         <!-- Filter Scroll Indicator Slider (Visible on Mobile & Tablets including iPad Pro < 1536px) -->
@@ -1248,51 +1246,7 @@
           </div>
         </div>
 
-        <!-- Fashion & Lookbooks (3 cards) -->
-        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
-          data-category="fashion"
-          data-type="gallery"
-          data-images='[
-            "/images/pajamas/pajamas-3-medium.jpg",
-            "/images/pajamas/pajamas-1-front.jpg",
-            "/images/pajamas/pajamas-2-beauty.jpg",
-            "/images/pajamas/pajamas-4-back.jpg",
-            "/images/pajamas/pajamas-5-macro.jpg",
-            "/images/pajamas/pajamas-6-flatlay.jpg"
-          ]'
-          data-title="Cherry Blossom Pajamas — Studio Lookbook"
-          data-category-label="Fashion & Lookbooks"
-          data-tags='["Fashion Model Generation", "Studio Lighting", "Catalog Angles"]'
-          data-description="Studio E-Commerce Lookbook created for a sleepwear brand using AI. Demonstrates high model consistency across a full catalog set: full-body front view, close-up beauty shot, 3/4 angle, back view, macro lace texture details, and flat-lay product staging."
-          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
-          <div>
-            <div class="portfolio-card-img-wrapper relative">
-              <img src="/images/pajamas/pajamas-3-medium.jpg" alt="Cherry Blossom Pajamas — Studio Lookbook" style="object-position: center 20%;">
-              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
-                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
-                <span>Gallery</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Fashion & Lookbooks</span>
-              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Cherry Blossom Pajamas — Studio Lookbook</h4>
-            <div class="flex flex-wrap gap-1.5 my-3">
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Fashion Model Generation</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Studio Lighting</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Catalog Angles</span>
-            </div>
-            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Commercial AI Lookbook production for luxury sleepwear brand with consistent multi-angle catalog shots.</p>
-          </div>
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
-            <span>View Photo Gallery</span>
-            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-          </div>
-        </div>
-
+        <!-- Fashion & Lookbooks (1 card) -->
         <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
           data-category="fashion"
           data-type="gallery"
@@ -1333,138 +1287,6 @@
           </div>
           <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
             <span>View Photo Gallery</span>
-            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-          </div>
-        </div>
-
-        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
-          data-category="fashion"
-          data-type="gallery"
-          data-images='[
-            "/images/urban/urban-1-oblojka.jpg",
-            "/images/urban/urban-2-full-body.jpg",
-            "/images/urban/urban-3-kholodilnik.jpg",
-            "/images/urban/urban-4-back.jpg"
-          ]'
-          data-title="Urban Night Lifestyle — Streetwear"
-          data-category-label="Fashion & Lookbooks"
-          data-tags='["Urban Lifestyle", "Night Lighting", "Streetwear Photography"]'
-          data-description="Commercial AI Streetwear photoshoot set in a cinematic night-time urban environment. Features consistent AI model generation across multi-angle lifestyle shots: close-up portrait, full-body outfit presentation, side-profile interaction, and back-view branding detail against store neon reflections."
-          data-tools='["Nano Banana Pro", "Photoshop", "Prompt Engineering"]'>
-          <div>
-            <div class="portfolio-card-img-wrapper relative">
-              <img src="/images/urban/urban-1-oblojka.jpg" alt="Urban Night Lifestyle — Streetwear" style="object-position: center 30%;">
-              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
-                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
-                <span>Gallery</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Fashion & Lookbooks</span>
-              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Urban Night Lifestyle — Streetwear</h4>
-            <div class="flex flex-wrap gap-1.5 my-3">
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Urban Lifestyle</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Night Lighting</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Streetwear Photography</span>
-            </div>
-            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Cinematic night street style photography, neon reflections, and high-contrast urban fashion aesthetics.</p>
-          </div>
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
-            <span>View Photo Gallery</span>
-            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-          </div>
-        </div>
-
-        <!-- AI Retouch & Styling (1 card) -->
-        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
-          data-category="retouch"
-          data-type="gallery"
-          data-type-label="BEFORE / AFTER SHOWCASE"
-          data-images='[
-            {"src": "/images/AI Retouch & Styling/1.jpg", "caption": "iPhone Motion Blur (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/2.jpg", "caption": "Cinematic Color Grade (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/3.jpg", "caption": "Dark Aesthetic Film (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/4.jpg", "caption": "4K Resolution Upscale (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/5.jpg", "caption": "Night Vision Effect (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/6.jpg", "caption": "2000s Retro Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/7.jpg", "caption": "GTA V Art Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/8.jpg", "caption": "Particle Effect (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/9.jpg", "caption": "CCTV Camera Style (Before / After)"},
-            {"src": "/images/AI Retouch & Styling/10.jpg", "caption": "FLIR Thermal Vision (Before / After)"}
-          ]'
-          data-title="Neural Post-Processing & Visual FX Suite"
-          data-category-label="AI Retouch & Styling"
-          data-tags='["Before / After", "Style Transfer", "4K Upscale", "Neural VFX"]'
-          data-description="A comprehensive showcase of neural image manipulation and post-production techniques. This suite demonstrates transforming standard captures into cinematic and stylized assets — featuring 4K neural upscaling, precision motion blur, vintage/retro emulations, night vision & FLIR thermal simulations, surveillance CCTV aesthetics, and particle disintegration effects."
-          data-tools='["Nano Banana Pro", "Prompt Engineering"]'>
-          <div>
-            <div class="portfolio-card-img-wrapper relative">
-              <img src="/images/AI Retouch & Styling/1.jpg" alt="Neural Post-Processing & Visual FX Suite">
-              <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10 flex items-center gap-1">
-                <svg class="w-3 h-3 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
-                <span>Gallery</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">AI Retouch & Styling</span>
-              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">Neural Post-Processing & Visual FX Suite</h4>
-            <div class="flex flex-wrap gap-1.5 my-3">
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Before / After</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Style Transfer</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">4K Upscale</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Neural VFX</span>
-            </div>
-            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Advanced AI post-processing pipeline: high-resolution upscaling, dynamic camera motion effects, cinematic film grading, and stylized neural aesthetics.</p>
-          </div>
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
-            <span>View Before / After Gallery</span>
-            <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-          </div>
-        </div>
-
-        <!-- Short Films (1 card) -->
-        <div onclick="openProjectModalFromCard(this)" class="portfolio-card p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 group cursor-pointer flex flex-col justify-between overflow-hidden min-h-[260px] shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)]"
-          data-category="films"
-          data-type="video"
-          data-video-src="https://res.cloudinary.com/ath6yflf/video/upload/v1786474315/TheFirstGuardian_FINAL_1080p_compressed.mp4"
-          data-title="The First Guardian — AI Sci-Fi Short Film"
-          data-category-label="Short Films"
-          data-tags='["Narrative Short Film", "Character Animation", "Worldbuilding"]'
-          data-description="Immersive sci-fi narrative short film featuring custom worldbuilding, AI character animation, orbital camera movements, and an epic orchestral soundtrack."
-          data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop", "CapCut"]'>
-          <div>
-            <div class="portfolio-card-img-wrapper relative">
-              <img src="ancient-echoes.jpg" alt="The First Guardian AI Short" style="object-position: center 35%;">
-              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors">
-                <div class="play-btn-glass">
-                  <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.5 6.5L16.5 12L9.5 17.5z"/></svg>
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="text-xs font-mono text-[#ff5722] tracking-wide uppercase font-semibold">Short Films</span>
-              <svg class="w-4 h-4 text-white/40 group-hover:text-[#ff5722] transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </div>
-            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-[#ff5722] transition-colors">The First Guardian — AI Sci-Fi Short Film</h4>
-            <div class="flex flex-wrap gap-1.5 my-3">
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Narrative Short Film</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Character Animation</span>
-              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">Worldbuilding</span>
-            </div>
-            <p class="text-sm text-white/60 leading-relaxed mb-4 line-clamp-2">Immersive sci-fi narrative short film featuring custom worldbuilding, AI character animation, and epic orchestral score.</p>
-          </div>
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-white/80 group-hover:text-white mt-2 pt-3 border-t border-white/10">
-            <span>Play Video Spot</span>
             <svg class="w-3.5 h-3.5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
           </div>
         </div>
