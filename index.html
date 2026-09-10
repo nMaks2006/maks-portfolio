@@ -1429,12 +1429,12 @@
 
       </div>
 
-      <!-- Pilot Project Offer Card -->
-      <div class="mt-10 sm:mt-14 p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0a0a0e] via-[#08080c] to-[#ff5722]/10 border border-[#ff5722]/20 hover:border-[#ff5722]/40 transition-all duration-300 relative overflow-hidden shadow-2xl group">
+      <!-- Combined Project & Pilot CTA Card -->
+      <div class="mt-10 sm:mt-14 p-6 sm:p-10 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0a0a0e] via-[#08080c] to-[#ff5722]/10 border border-[#ff5722]/20 hover:border-[#ff5722]/40 transition-all duration-300 relative overflow-hidden shadow-2xl group">
         <!-- Ambient Glow Effect -->
         <div class="absolute -top-20 -right-20 w-56 h-56 bg-[#ff5722]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#ff5722]/20 transition-all duration-500"></div>
 
-        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div class="space-y-3 max-w-3xl">
             <!-- Active Status Badge -->
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30">
@@ -1443,19 +1443,24 @@
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span class="text-xs font-mono font-semibold tracking-wider uppercase text-emerald-400">
-                Start with a Pilot Project
+                Currently Open for New Projects
               </span>
             </div>
 
+            <!-- Title -->
+            <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Have a project in mind?
+            </h3>
+
             <!-- Descriptive Copy -->
-            <p class="text-white/90 text-sm sm:text-base leading-relaxed sm:leading-relaxed">
-              Not ready for a full campaign yet? We can start with a <strong class="text-white font-semibold text-[#ff5722]">paid pilot</strong> — a single hero visual or a short 3-second video concept — to align on the creative direction. If we proceed with the full project, the pilot cost is <strong class="text-white font-semibold">fully deducted</strong> from the final invoice. Let's discuss your scope to estimate the pilot.
+            <p class="text-white/80 text-sm sm:text-base leading-relaxed sm:leading-relaxed">
+              Let's discuss your timeline, deliverables, and exact scope. Not ready for a full campaign yet? We can start with a <strong class="text-white font-semibold text-[#ff5722]">paid pilot</strong> — a single hero visual or a short 3-second video concept. If we proceed with the full project, the pilot cost is <strong class="text-white font-semibold">fully deducted</strong> from the final invoice.
             </p>
           </div>
 
           <!-- Action Button -->
-          <button onclick="openContactModal()" class="w-full md:w-auto group flex items-center justify-center gap-3 bg-[#ff5722] hover:bg-[#ff5722]/90 text-white px-6 py-3.5 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-[1.02] cursor-pointer shrink-0 shadow-lg shadow-[#ff5722]/30 active:scale-98">
-            <span>Request a Pilot</span>
+          <button onclick="openContactModal()" class="w-full lg:w-auto group flex items-center justify-center gap-3 bg-[#ff5722] hover:bg-[#ff5722]/90 text-white px-7 py-4 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-[1.02] cursor-pointer shrink-0 shadow-lg shadow-[#ff5722]/30 active:scale-98">
+            <span>Discuss Project</span>
             <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
               <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -1463,26 +1468,6 @@
             </div>
           </button>
         </div>
-      </div>
-
-      <!-- Call To Action Block -->
-      <div class="mt-8 sm:mt-12 p-6 sm:p-10 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-white/[0.03] via-white/[0.05] to-[#ff5722]/15 border border-white/10 hover:border-[#ff5722]/40 transition-all duration-300 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-        <div class="space-y-1 text-center sm:text-left">
-          <h4 class="text-xl sm:text-2xl font-bold text-white">
-            Have a project in mind?
-          </h4>
-          <p class="text-white/70 text-sm sm:text-base">
-            Let's discuss your timeline and deliverables.
-          </p>
-        </div>
-        <button onclick="openContactModal()" class="group flex items-center gap-3 bg-[#ff5722] hover:bg-[#ff5722]/90 text-white px-6 py-3.5 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-[1.02] cursor-pointer shrink-0 shadow-lg shadow-[#ff5722]/30 active:scale-98">
-          <span>Start a Project</span>
-          <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1">
-            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </div>
-        </button>
       </div>
 
     </div>
