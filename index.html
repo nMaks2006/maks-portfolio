@@ -887,7 +887,7 @@
           data-title="Times Square — FOOH CGI Billboard Takeover"
           data-category-label="Commercial Video"
           data-tags='["FOOH CGI", "Times Square Billboard", "Commercial Spot", "Brand Takeover"]'
-          data-description="High-impact FOOH CGI commercial spot featuring a massive canvas banner unrolling across a Times Square billboard. Demonstrates dynamic fabric physics, photorealistic urban lighting, and seamless environment integration — proving global-scale advertising is possible without on-site filming or physical studio budgets."
+          data-description='<div class="space-y-5 text-sm text-gray-300 leading-relaxed text-left"><div><h4 class="text-white font-semibold mb-1 uppercase tracking-wider text-xs">Context &amp; Challenge</h4><p>Global outdoor advertising in iconic locations like Times Square usually requires massive budgets, complex logistics, and endless permits. The challenge was to prove that brands can achieve global viral reach without ever stepping on-site.</p></div><div><h4 class="text-white font-semibold mb-1 uppercase tracking-wider text-xs">Concept &amp; Visual System</h4><p>A high-impact FOOH (Fake Out Of Home) takeover. The core idea breaks the fourth wall—a massive, heavy canvas banner unrolling aggressively over existing digital billboards. The visual focus is on photorealistic fabric physics and seamless integration into the complex lighting of a busy New York street.</p></div><div><h4 class="text-white font-semibold mb-1 uppercase tracking-wider text-xs">Process &amp; Execution</h4><ul class="list-disc list-inside space-y-1"><li><strong class="text-gray-200">Environment:</strong> Generated base dynamic footage with active traffic and urban lighting using Nano Banana Pro.</li><li><strong class="text-gray-200">Physics Simulation:</strong> Engineered the weight, gravity, and unrolling dynamics of the fabric in Omni Flash.</li><li><strong class="text-gray-200">Compositing:</strong> Blended vector typography, matched real-world shadows, and finalized color grading in Photoshop.</li></ul></div><div><h4 class="text-white font-semibold mb-1 uppercase tracking-wider text-xs">Result &amp; My Role</h4><p>A ready-to-launch viral marketing asset that proves global-scale Guerrilla marketing is possible with zero physical studio budget.</p><p class="mt-1"><strong class="text-white">Role:</strong> AI Creator (Concept, VFX Simulation, Compositing).</p></div></div>'
           data-tools='["Nano Banana Pro", "Omni Flash", "Photoshop"]'>
           <div>
             <div class="portfolio-card-img-wrapper relative">
@@ -2105,7 +2105,7 @@
       document.getElementById('modal-category').textContent = categoryLabel;
       const defaultTypeBadge = type === 'video' ? 'Commercial Video Spot' : 'Photo Lookbook Gallery';
       document.getElementById('modal-type-badge').textContent = card.dataset.typeLabel || defaultTypeBadge;
-      document.getElementById('modal-description').textContent = description;
+      document.getElementById('modal-description').innerHTML = description;
 
       // Render Tags
       try {
