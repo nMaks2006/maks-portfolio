@@ -71,13 +71,28 @@
     }
 
     .modal-content-container::-webkit-scrollbar {
-      display: none !important;
-      width: 0 !important;
+      width: 5px;
+    }
+
+    .modal-content-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+    }
+
+    .modal-content-container::-webkit-scrollbar-thumb {
+      background: #ff5722;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(255, 87, 34, 0.5);
+    }
+
+    .modal-content-container::-webkit-scrollbar-thumb:hover {
+      background: #ff7043;
+      box-shadow: 0 0 12px rgba(255, 87, 34, 0.9);
     }
 
     .modal-content-container {
-      -ms-overflow-style: none !important;
-      scrollbar-width: none !important;
+      scrollbar-width: thin;
+      scrollbar-color: #ff5722 rgba(255, 255, 255, 0.03);
     }
 
     * {
@@ -1643,8 +1658,8 @@
           </div>
         </div>
 
-        <!-- Mobile Scroll Indicator & Dark Gradient Overlay (Mobile < md ONLY) -->
-        <div id="modal-scroll-hint" class="md:hidden absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/85 to-transparent pointer-events-none flex items-end justify-center pb-2 transition-opacity duration-300 z-30">
+        <!-- Scroll Indicator & Dark Gradient Overlay -->
+        <div id="modal-scroll-hint" class="absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/85 to-transparent pointer-events-none flex items-end justify-center pb-2 transition-opacity duration-300 z-30">
           <div class="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-white/80 bg-black/80 px-3 py-1 rounded-full border border-white/15 backdrop-blur-md shadow-lg">
             <span>Scroll for details</span>
             <svg class="w-3.5 h-3.5 text-[#ff5722] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
