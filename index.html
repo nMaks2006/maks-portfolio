@@ -92,6 +92,35 @@
       scrollbar-color: rgba(255, 87, 34, 0.7) transparent;
     }
 
+    /* Scroll Reveal & Text Entrance Animations (Modern Minimalist) */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-75 { transition-delay: 75ms; }
+    .delay-100 { transition-delay: 100ms; }
+    .delay-150 { transition-delay: 150ms; }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-300 { transition-delay: 300ms; }
+    .delay-400 { transition-delay: 400ms; }
+    .delay-500 { transition-delay: 500ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -735,23 +764,23 @@
   <div id="intro-section" class="intro-section relative z-10 w-full px-4 sm:px-6 lg:px-8 pb-32 flex flex-col justify-between">
     
     <main id="hero-section" class="min-h-screen flex flex-col justify-center items-start max-w-4xl pt-20 sm:pt-24 text-left pl-6 sm:pl-14 lg:pl-24">
-      <p class="text-lg sm:text-xl lg:text-2xl text-white/90 font-medium mb-3.5 sm:mb-5 lg:mb-6 tracking-tight drop-shadow-md">
+      <p class="text-lg sm:text-xl lg:text-2xl text-white/90 font-medium mb-3.5 sm:mb-5 lg:mb-6 tracking-tight drop-shadow-md reveal-on-scroll delay-100">
         Hey, I'm Maks
       </p>
 
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white leading-[0.95] select-none mb-4 lg:mb-5 drop-shadow-lg">
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white leading-[0.95] select-none mb-4 lg:mb-5 drop-shadow-lg reveal-on-scroll delay-150">
         AI Visual<br />Creator.
       </h1>
 
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl text-white font-medium leading-tight mb-3.5 max-w-2xl drop-shadow-md">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl text-white font-medium leading-tight mb-3.5 max-w-2xl drop-shadow-md reveal-on-scroll delay-200">
         Bringing impossible visuals & AI videos to life.
       </h2>
 
-      <p class="text-white/80 text-base sm:text-lg max-w-2xl font-normal leading-relaxed mb-6 lg:mb-7 drop-shadow-sm">
+      <p class="text-white/80 text-base sm:text-lg max-w-2xl font-normal leading-relaxed mb-6 lg:mb-7 drop-shadow-sm reveal-on-scroll delay-300">
         From cinematic AI video spots & UGC avatar ads to high-fashion studio editorials — creating visuals that captivate and convert.
       </p>
 
-      <button onclick="scrollToSection('about')" class="inline-flex items-center gap-2 text-sm sm:text-base font-medium text-[#ff5722] hover:text-[#ff5722]/80 transition-colors group cursor-pointer drop-shadow-md">
+      <button onclick="scrollToSection('about')" class="inline-flex items-center gap-2 text-sm sm:text-base font-medium text-[#ff5722] hover:text-[#ff5722]/80 transition-colors group cursor-pointer drop-shadow-md reveal-on-scroll delay-400">
         <span>Read About Me & My Work</span>
         <svg class="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
@@ -761,7 +790,7 @@
 
     <section id="about-section" class="min-h-screen pt-16 sm:pt-28 lg:pt-36 pb-12 sm:pb-20 my-8 sm:my-24 max-w-7xl mx-auto flex flex-col justify-center text-left px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col gap-8 items-start text-left w-full">
-        <div class="flex items-center justify-between w-full flex-wrap gap-4 border-b border-white/20 pb-4">
+        <div class="flex items-center justify-between w-full flex-wrap gap-4 border-b border-white/20 pb-4 reveal-on-scroll">
           <div class="flex items-center gap-3">
             <span class="w-2.5 h-2.5 rounded-full bg-[#ff5722] animate-pulse"></span>
             <h3 class="text-xs font-mono tracking-widest uppercase text-white font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
@@ -774,7 +803,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch w-full mt-4">
-          <div class="flex justify-start w-full">
+          <div class="flex justify-start w-full reveal-on-scroll delay-150">
             <div class="about-text-card space-y-4 text-left shadow-xl h-full flex flex-col justify-center" style="width: 100%; max-width: 650px;">
               <p class="text-xl sm:text-2xl lg:text-3xl text-white/85 font-normal leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                 I am a digital creator specializing in <span class="text-[#ff5722] font-semibold opacity-100">next-generation AI video synthesis & commercial media</span>, bridging artistic direction with state-of-the-art generative technology.
@@ -786,7 +815,7 @@
           </div>
 
           <div class="grid grid-cols-2 gap-2.5 sm:gap-4 w-full max-w-[650px] items-stretch">
-            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg reveal-on-scroll delay-100" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
               <svg class="w-5 h-5 text-[#ff5722] mb-3 group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
@@ -800,7 +829,7 @@
               </div>
             </div>
 
-            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg reveal-on-scroll delay-200" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
               <svg class="w-5 h-5 text-[#ff5722] mb-3 group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.022.547l-2.387 2.387A2 2 0 003.6 21.464l.659-.659a4 4 0 012.828-1.172h1.586a4 4 0 012.828 1.172l.659.659a2 2 0 001.414.586h.828a2 2 0 001.414-.586l.659-.659a4 4 0 012.828-1.172h1.586a4 4 0 012.828 1.172l.659.659a2 2 0 001.414-.586z" />
               </svg>
@@ -814,7 +843,7 @@
               </div>
             </div>
 
-            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg reveal-on-scroll delay-300" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
               <svg class="w-5 h-5 text-[#ff5722] mb-3 group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
               </svg>
@@ -828,7 +857,7 @@
               </div>
             </div>
 
-            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
+            <div class="rounded-[20px] flex flex-col justify-start border border-white/[0.08] hover:border-[#ff5722] hover:shadow-[0_0_20px_rgba(255,87,34,0.25)] hover:bg-black/50 transition-all duration-300 group cursor-pointer shadow-lg reveal-on-scroll delay-400" style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 18px 20px;">
               <svg class="w-5 h-5 text-[#ff5722] mb-3 group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
               </svg>
@@ -850,7 +879,7 @@
   <!-- Portfolio Section -->
   <section id="portfolio" class="relative z-20 bg-[#000000] w-full py-16 sm:py-32 px-4 sm:px-8 lg:px-12 border-t border-white/10">
     <div class="max-w-7xl mx-auto text-left">
-      <div class="flex items-center gap-3 mb-4">
+      <div class="flex items-center gap-3 mb-4 reveal-on-scroll">
         <svg class="w-5 h-5 text-[#ff5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
         </svg>
@@ -858,15 +887,15 @@
           Selected Works Portfolio
         </h3>
       </div>
-      <h2 class="text-3xl sm:text-5xl font-bold text-white mb-4">
+      <h2 class="text-3xl sm:text-5xl font-bold text-white mb-4 reveal-on-scroll delay-75">
         Featured Commercial AI Videos & Visual Spots
       </h2>
-      <p class="text-white/60 text-base max-w-3xl mb-10">
+      <p class="text-white/60 text-base max-w-3xl mb-10 reveal-on-scroll delay-150">
         A curated selection of high-converting AI visuals, cinematic video spots, and lifestyle creative assets engineered for global brands.
       </p>
 
       <!-- Category Filter Bar (Single row horizontal scroll with custom mobile slider indicator) -->
-      <div class="mb-8 sm:mb-10">
+      <div class="mb-8 sm:mb-10 reveal-on-scroll delay-200">
         <div id="filter-bar-container" class="flex items-center gap-2.5 overflow-x-auto pb-2 sm:pb-4 no-scrollbar flex-nowrap w-full max-w-full touch-pan-x scroll-smooth">
           <button onclick="filterPortfolio('all', this)" class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-[#ff5722] text-white border-[#ff5722] shadow-lg shadow-[#ff5722]/25 scale-[1.03]" data-filter="all">All</button>
           <button onclick="filterPortfolio('commercial', this)" class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer whitespace-nowrap border bg-white/5 text-white/70 border-white/10 hover:border-white/30 hover:text-white hover:bg-white/10" data-filter="commercial">Commercial Video</button>
@@ -1348,17 +1377,17 @@
     <div class="max-w-7xl mx-auto text-left">
       
       <!-- Section Header & Badge -->
-      <div class="flex items-center gap-3 mb-3 sm:mb-4">
+      <div class="flex items-center gap-3 mb-3 sm:mb-4 reveal-on-scroll">
         <span class="w-2.5 h-2.5 rounded-full bg-[#ff5722] animate-pulse"></span>
         <h3 class="text-xs font-mono tracking-widest uppercase text-[#ff5722] font-semibold">
           Seamless Collaboration
         </h3>
       </div>
       
-      <h2 class="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4">
+      <h2 class="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4 reveal-on-scroll delay-100">
         How We Work Together
       </h2>
-      <p class="text-white/60 text-sm sm:text-base max-w-3xl mb-10 sm:mb-16">
+      <p class="text-white/60 text-sm sm:text-base max-w-3xl mb-10 sm:mb-16 reveal-on-scroll delay-150">
         From raw product photos to high-converting commercial visuals in 4 simple steps.
       </p>
 
@@ -1366,7 +1395,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         <!-- Step 1 -->
-        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden">
+        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden reveal-on-scroll delay-100">
           <div class="absolute top-0 right-0 w-24 h-24 bg-[#ff5722]/5 rounded-bl-full pointer-events-none group-hover:bg-[#ff5722]/10 transition-colors"></div>
           <div>
             <div class="flex items-center justify-between gap-2 mb-6">
@@ -1389,7 +1418,7 @@
         </div>
 
         <!-- Step 2 -->
-        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden">
+        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden reveal-on-scroll delay-200">
           <div class="absolute top-0 right-0 w-24 h-24 bg-[#ff5722]/5 rounded-bl-full pointer-events-none group-hover:bg-[#ff5722]/10 transition-colors"></div>
           <div>
             <div class="flex items-center justify-between gap-2 mb-6">
@@ -1412,7 +1441,7 @@
         </div>
 
         <!-- Step 3 -->
-        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden">
+        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden reveal-on-scroll delay-300">
           <div class="absolute top-0 right-0 w-24 h-24 bg-[#ff5722]/5 rounded-bl-full pointer-events-none group-hover:bg-[#ff5722]/10 transition-colors"></div>
           <div>
             <div class="flex items-center justify-between gap-2 mb-6">
@@ -1435,7 +1464,7 @@
         </div>
 
         <!-- Step 4 -->
-        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden">
+        <div class="group p-6 sm:p-7 rounded-2xl bg-white/[0.03] border border-[#ff5722]/20 hover:border-[#ff5722]/70 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(255,87,34,0.15)] relative overflow-hidden reveal-on-scroll delay-400">
           <div class="absolute top-0 right-0 w-24 h-24 bg-[#ff5722]/5 rounded-bl-full pointer-events-none group-hover:bg-[#ff5722]/10 transition-colors"></div>
           <div>
             <div class="flex items-center justify-between gap-2 mb-6">
@@ -1460,7 +1489,7 @@
       </div>
 
       <!-- Combined Project & Pilot CTA Card -->
-      <div class="mt-10 sm:mt-14 p-6 sm:p-10 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0a0a0e] via-[#08080c] to-[#ff5722]/10 border border-[#ff5722]/20 hover:border-[#ff5722]/40 transition-all duration-300 relative overflow-hidden shadow-2xl group">
+      <div class="mt-10 sm:mt-14 p-6 sm:p-10 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0a0a0e] via-[#08080c] to-[#ff5722]/10 border border-[#ff5722]/20 hover:border-[#ff5722]/40 transition-all duration-300 relative overflow-hidden shadow-2xl group reveal-on-scroll">
         <!-- Ambient Glow Effect -->
         <div class="absolute -top-20 -right-20 w-56 h-56 bg-[#ff5722]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#ff5722]/20 transition-all duration-500"></div>
 
@@ -1508,16 +1537,16 @@
     <div class="max-w-7xl mx-auto text-left">
       
       <!-- Section Header -->
-      <div class="flex items-center gap-3 mb-3 sm:mb-4">
+      <div class="flex items-center gap-3 mb-3 sm:mb-4 reveal-on-scroll">
         <span class="w-2.5 h-2.5 rounded-full bg-[#ff5722] animate-pulse"></span>
         <h3 class="text-xs font-mono tracking-widest uppercase text-white/70">
           Direct Channels
         </h3>
       </div>
-      <h2 class="text-2xl sm:text-5xl font-bold text-white mb-3 sm:mb-4">
+      <h2 class="text-2xl sm:text-5xl font-bold text-white mb-3 sm:mb-4 reveal-on-scroll delay-75">
         Connect & Collaborate
       </h2>
-      <p class="text-white/60 text-sm sm:text-base max-w-3xl mb-6 sm:mb-12">
+      <p class="text-white/60 text-sm sm:text-base max-w-3xl mb-6 sm:mb-12 reveal-on-scroll delay-150">
         Select your preferred messenger or social platform below to send a direct message, discuss AI video spots, or request a visual project estimate.
       </p>
 
@@ -1525,7 +1554,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         
         <!-- Telegram Card -->
-        <a href="https://t.me/nedvedz" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#229ED9]/80 hover:bg-[#229ED9]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(34,158,217,0.25)] min-h-[135px] sm:min-h-[240px]">
+        <a href="https://t.me/nedvedz" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#229ED9]/80 hover:bg-[#229ED9]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(34,158,217,0.25)] min-h-[135px] sm:min-h-[240px] reveal-on-scroll delay-100">
           <div>
             <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#229ED9]/15 border border-[#229ED9]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
               <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#229ED9]" fill="currentColor" viewBox="0 0 24 24">
@@ -1542,7 +1571,7 @@
         </a>
 
         <!-- WhatsApp Card -->
-        <a href="https://wa.me/48573411275" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#25D366]/80 hover:bg-[#25D366]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(37,211,102,0.25)] min-h-[135px] sm:min-h-[240px]">
+        <a href="https://wa.me/48573411275" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#25D366]/80 hover:bg-[#25D366]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(37,211,102,0.25)] min-h-[135px] sm:min-h-[240px] reveal-on-scroll delay-200">
           <div>
             <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
               <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
@@ -1559,7 +1588,7 @@
         </a>
 
         <!-- Instagram Card -->
-        <a href="https://ig.me/m/hey_nmaks" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#E1306C]/80 hover:bg-[#E1306C]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(225,48,108,0.25)] min-h-[135px] sm:min-h-[240px]">
+        <a href="https://ig.me/m/hey_nmaks" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#E1306C]/80 hover:bg-[#E1306C]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(225,48,108,0.25)] min-h-[135px] sm:min-h-[240px] reveal-on-scroll delay-300">
           <div>
             <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#E1306C]/15 border border-[#E1306C]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
               <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#E1306C]" fill="currentColor" viewBox="0 0 24 24">
@@ -1576,7 +1605,7 @@
         </a>
 
         <!-- Discord Card -->
-        <a href="https://discord.com/users/maksaicreator_22987" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#5865F2]/80 hover:bg-[#5865F2]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(88,101,242,0.25)] min-h-[135px] sm:min-h-[240px]">
+        <a href="https://discord.com/users/maksaicreator_22987" target="_blank" rel="noopener noreferrer" class="group p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#5865F2]/80 hover:bg-[#5865F2]/10 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(88,101,242,0.25)] min-h-[135px] sm:min-h-[240px] reveal-on-scroll delay-400">
           <div>
             <div class="w-9 h-9 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#5865F2]/15 border border-[#5865F2]/30 flex items-center justify-center mb-2.5 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
               <svg class="w-4.5 h-4.5 sm:w-7 sm:h-7 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">
@@ -2490,9 +2519,35 @@
     window.addEventListener('scroll', updateScrollspy, { passive: true });
     window.addEventListener('resize', updateScrollspy, { passive: true });
 
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.reveal-on-scroll');
+      if (!revealElements.length) return;
+
+      if (!('IntersectionObserver' in window)) {
+        revealElements.forEach(el => el.classList.add('revealed'));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+    }
+
     resizeCanvas();
     initGalleryTouchSwipes();
     initFilterScrollIndicator();
+    initScrollReveal();
     requestAnimationFrame(animationLoop);
 
     setTimeout(() => {
